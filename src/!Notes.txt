@@ -1,0 +1,5 @@
+DEV has been exported fully for 1.3
+
+TO DO - Conditional compile on encryption
+
+Last dev version was on 4.2.2 on CENTOS on MAC with the AS_USER stuff.
