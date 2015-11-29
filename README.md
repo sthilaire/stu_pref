@@ -10,3 +10,5 @@ Oracle Application Express (APEX)
 
 # New Project for Preference Setup
 Includes management application for APEX.
+
+License goes here
