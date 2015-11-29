@@ -1,6 +1,6 @@
 PROMPT == STU_PREF Trigger
 
---                         123456789012345678901234567890
+--                        123456789012345678901234567890
 CREATE OR REPLACE TRIGGER BIU_STU_PREF
 BEFORE INSERT OR UPDATE ON  STU_PREF
 REFERENCING NEW AS NEW OLD AS OLD
@@ -15,21 +15,25 @@ BEGIN
     :NEW.CREATED_BY := nvl(wwv_flow.g_user,nvl(:NEW.CREATED_BY,USER));
     IF :NEW.VALUE_PW IS NOT NULL THEN
       :NEW.PW_RAW := STU_PREF_UTIL.encrypt(P_VALUE => :NEW.VALUE_PW,
-                                            P_KEY => :NEW.PREF_ID);
+                                             P_KEY => :NEW.PREF_ID);
       :NEW.VALUE_PW:=NULL;
     END IF;
   END IF;
+
   IF UPDATING THEN
     :NEW.UPDATED_ON := SYSDATE;
     :NEW.UPDATED_BY := nvl(wwv_flow.g_user,nvl(:NEW.UPDATED_BY,USER));
     IF :NEW.VALUE_PW IS NOT NULL THEN
       :NEW.PW_RAW := STU_PREF_UTIL.encrypt(P_VALUE => :NEW.VALUE_PW,
-                                            P_KEY => :NEW.PREF_ID);
+                                             P_KEY => :NEW.PREF_ID);
       :NEW.VALUE_PW:=NULL;
     END IF;
   END IF;
  
-  
+  -- Increment the revision field
+  :NEW.REVISION:=nvl(:OLD.REVISION,0)+1;
+ 
+
 END;
 /
 
