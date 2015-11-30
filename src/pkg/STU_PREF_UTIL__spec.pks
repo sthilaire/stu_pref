@@ -5,7 +5,7 @@ PACKAGE STU_PREF_UTIL IS
 
 -----------------------------------------------------------------------
 --
---               Copyright(C) 2015 T. St. Hilaire 
+--               Copyright(C) 2015 Tim St. Hilaire 
 --                         All Rights Reserved
 -- 
 -----------------------------------------------------------------------
@@ -17,6 +17,7 @@ PACKAGE STU_PREF_UTIL IS
 --  Comments:       
 -----------------------------------------------------------------------
 --
+-- 1.3    20-NOV-2015   Updated to STU_PREF for GitHub
 -- 1.2    04-OCT-2014   Next revision with improved update capabilities
 -- 1.1    01-SEP-2014   Simplified table (hard to beleive)
 -----------------------------------------------------------------------
@@ -53,7 +54,7 @@ FUNCTION encrypt( p_value  VARCHAR2,
 --  Purpose : Quick Set the value for the setting table
 -------------------------------------------------------------------
 PROCEDURE SET_PREF       ( p_name STU_PREF.PREF_NAME%TYPE, 
-                           p_value STU_PREF.value1%TYPE);
+                           p_value STU_PREF.VALUE1%TYPE);
 
 -------------------------------------------------------------------
 --< SET_PREF >-----------------------------------------------------
@@ -111,7 +112,7 @@ FUNCTION GET_PREF_DATE ( p_name  VARCHAR2) RETURN STU_PREF.DATE1%TYPE;
 --  Comments:
 --
 -------------------------------------------------------------------
-FUNCTION GET_PREF_PW ( p_name  VARCHAR2) RETURN STU_PREF.VALUE_PW%TYPE;
+FUNCTION GET_PREF_PW ( p_name  VARCHAR2) RETURN STU_PREF.PASSWORD_TEMP%TYPE;
 
 
 ---------------------------------------------------------------------

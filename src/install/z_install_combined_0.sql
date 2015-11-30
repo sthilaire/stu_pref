@@ -13,29 +13,79 @@ PREF_NAME       VARCHAR2 (255 ),
 VALUE1          VARCHAR2 (2000),
 NUMBER1         NUMBER,
 DATE1           DATE,
-VALUE_PW        VARCHAR2 (2000),
-PW_RAW          RAW      (2000),
+PASSWORD_TEMP   VARCHAR2 (2000),
+PASSWORD_ENC    RAW      (2000),
 DESCRIPTION     VARCHAR2 (2000),
-USER_EDIT       VARCHAR2 (1   ),
+API_EDIT        VARCHAR2 (1   ),
+API_VIEW        VARCHAR2 (1   ),
 CREATED_BY      VARCHAR2 (50  ),
 CREATED_ON      DATE,
 UPDATED_BY      VARCHAR2 (50  ),
-UPDATED_ON      DATE
+UPDATED_ON      DATE,
+REVISION        NUMBER
 );
 
 --                  123456789012345678901234567890
 CREATE UNIQUE INDEX PK_STU_PREF ON STU_PREF (PREF_ID);
-
 CREATE UNIQUE INDEX UK1_STU_PREF ON STU_PREF (PREF_NAME);
 
-  PROMPT == STU_PREF_UTIL Package Spec
+
+-- Table Comments
+COMMENT ON TABLE  "STU_PREF" IS  'Contains main measures list and attributes';
+COMMENT ON COLUMN "STU_PREF"."PREF_ID"    IS 'Primary Key ID';
+COMMENT ON COLUMN "STU_PREF"."CREATED_BY" IS 'Standard Who/When';
+COMMENT ON COLUMN "STU_PREF"."CREATED_ON" IS 'Standard Who/When';
+COMMENT ON COLUMN "STU_PREF"."UPDATED_BY" IS 'Standard Who/When';
+COMMENT ON COLUMN "STU_PREF"."UPDATED_ON" IS 'Standard Who/When';
+COMMENT ON COLUMN "STU_PREF"."REVISION"   IS 'Standard Used to determine if a message was updated.';
+
+PROMPT == STU_PREF Trigger
+
+--                        123456789012345678901234567890
+CREATE OR REPLACE TRIGGER BIU_STU_PREF
+BEFORE INSERT OR UPDATE ON  STU_PREF
+REFERENCING NEW AS NEW OLD AS OLD
+FOR EACH ROW
+BEGIN
+  IF INSERTING THEN 
+    IF :NEW.PREF_ID IS NULL THEN
+      SELECT to_number(sys_guid(),'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX')
+        INTO :NEW.PREF_ID FROM DUAL;
+    END IF;
+    :NEW.CREATED_ON := SYSDATE;
+    :NEW.CREATED_BY := nvl(wwv_flow.g_user,nvl(:NEW.CREATED_BY,USER));
+    IF :NEW.PASSWORD_TEMP IS NOT NULL THEN
+      :NEW.PASSWORD_ENC := STU_PREF_UTIL.encrypt(P_VALUE => :NEW.PASSWORD_TEMP,
+                                                 P_KEY   => :NEW.PREF_ID);
+      :NEW.PASSWORD_TEMP:=NULL;
+    END IF;
+  END IF;
+
+  IF UPDATING THEN
+    :NEW.UPDATED_ON := SYSDATE;
+    :NEW.UPDATED_BY := nvl(wwv_flow.g_user,nvl(:NEW.UPDATED_BY,USER));
+    IF :NEW.PASSWORD_TEMP IS NOT NULL THEN
+      :NEW.PASSWORD_ENC := STU_PREF_UTIL.encrypt(P_VALUE => :NEW.PASSWORD_TEMP,
+                                                 P_KEY   => :NEW.PREF_ID);
+      :NEW.PASSWORD_TEMP:=NULL;
+    END IF;
+  END IF;
+ 
+  -- Increment the revision field
+  :NEW.REVISION:=nvl(:OLD.REVISION,0)+1;
+ 
+
+END;
+/
+
+PROMPT == STU_PREF_UTIL Package Spec
 
 create or replace
 PACKAGE STU_PREF_UTIL IS
 
 -----------------------------------------------------------------------
 --
---               Copyright(C) 2015 T. St. Hilaire 
+--               Copyright(C) 2015 Tim St. Hilaire 
 --                         All Rights Reserved
 -- 
 -----------------------------------------------------------------------
@@ -47,6 +97,7 @@ PACKAGE STU_PREF_UTIL IS
 --  Comments:       
 -----------------------------------------------------------------------
 --
+-- 1.3    20-NOV-2015   Updated to STU_PREF for GitHub
 -- 1.2    04-OCT-2014   Next revision with improved update capabilities
 -- 1.1    01-SEP-2014   Simplified table (hard to beleive)
 -----------------------------------------------------------------------
@@ -83,7 +134,7 @@ FUNCTION encrypt( p_value  VARCHAR2,
 --  Purpose : Quick Set the value for the setting table
 -------------------------------------------------------------------
 PROCEDURE SET_PREF       ( p_name STU_PREF.PREF_NAME%TYPE, 
-                           p_value STU_PREF.value1%TYPE);
+                           p_value STU_PREF.VALUE1%TYPE);
 
 -------------------------------------------------------------------
 --< SET_PREF >-----------------------------------------------------
@@ -141,7 +192,7 @@ FUNCTION GET_PREF_DATE ( p_name  VARCHAR2) RETURN STU_PREF.DATE1%TYPE;
 --  Comments:
 --
 -------------------------------------------------------------------
-FUNCTION GET_PREF_PW ( p_name  VARCHAR2) RETURN STU_PREF.VALUE_PW%TYPE;
+FUNCTION GET_PREF_PW ( p_name  VARCHAR2) RETURN STU_PREF.PASSWORD_TEMP%TYPE;
 
 
 ---------------------------------------------------------------------
@@ -200,41 +251,6 @@ END STU_PREF_UTIL;
 
 /
 
-PROMPT == STU_PREF Trigger
-
---                         123456789012345678901234567890
-CREATE OR REPLACE TRIGGER BIU_STU_PREF
-BEFORE INSERT OR UPDATE ON  STU_PREF
-REFERENCING NEW AS NEW OLD AS OLD
-FOR EACH ROW
-BEGIN
-  IF INSERTING THEN 
-    IF :NEW.PREF_ID IS NULL THEN
-      SELECT to_number(sys_guid(),'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX')
-        INTO :NEW.PREF_ID FROM DUAL;
-    END IF;
-    :NEW.CREATED_ON := SYSDATE;
-    :NEW.CREATED_BY := nvl(wwv_flow.g_user,nvl(:NEW.CREATED_BY,USER));
-    IF :NEW.VALUE_PW IS NOT NULL THEN
-      :NEW.PW_RAW := STU_PREF_UTIL.encrypt(P_VALUE => :NEW.VALUE_PW,
-                                            P_KEY => :NEW.PREF_ID);
-      :NEW.VALUE_PW:=NULL;
-    END IF;
-  END IF;
-  IF UPDATING THEN
-    :NEW.UPDATED_ON := SYSDATE;
-    :NEW.UPDATED_BY := nvl(wwv_flow.g_user,nvl(:NEW.UPDATED_BY,USER));
-    IF :NEW.VALUE_PW IS NOT NULL THEN
-      :NEW.PW_RAW := STU_PREF_UTIL.encrypt(P_VALUE => :NEW.VALUE_PW,
-                                            P_KEY => :NEW.PREF_ID);
-      :NEW.VALUE_PW:=NULL;
-    END IF;
-  END IF;
- 
-  
-END;
-/
-
 PROMPT == STU_PREF_UTIL Package Body
 
 create or replace
@@ -242,7 +258,7 @@ PACKAGE BODY STU_PREF_UTIL AS
 
 ---------------------------------------------------------------------
 --
---               Copyright(C) 2015 T. St. Hilaire
+--               Copyright(C) 2015 Tim St. Hilaire
 --                         All Rights Reserved
 -- 
 ---------------------------------------------------------------------
@@ -254,6 +270,7 @@ PACKAGE BODY STU_PREF_UTIL AS
 --  Comments:       
 -----------------------------------------------------------------------
 --
+-- 1.3    20-NOV-2015   Updated to STU_PREF for GitHub
 -- 1.2    04-OCT-2014   Next revision with improved update capabilities
 -- 1.1    01-SEP-2014   Simplified table (hard to beleive)
 -----------------------------------------------------------------------

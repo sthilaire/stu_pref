@@ -31,11 +31,11 @@ CREATE UNIQUE INDEX UK1_STU_PREF ON STU_PREF (PREF_NAME);
 
 
 -- Table Comments
-COMMENT ON TABLE  "AS_MY_TABLE" IS  'Contains main measures list and attributes';
-COMMENT ON COLUMN "AS_MY_TABLE"."AS_MY_TABLE_ID"    IS 'Primary Key ID';
-COMMENT ON COLUMN "AS_MY_TABLE"."CREATED_BY" IS 'Standard Who/When';
-COMMENT ON COLUMN "AS_MY_TABLE"."CREATED_ON" IS 'Standard Who/When';
-COMMENT ON COLUMN "AS_MY_TABLE"."UPDATED_BY" IS 'Standard Who/When';
-COMMENT ON COLUMN "AS_MY_TABLE"."UPDATED_ON" IS 'Standard Who/When';
-COMMENT ON COLUMN "AS_MY_TABLE"."REVISION"   IS 'Standard Used to determine if a message was updated.  LOBs are difficult to checksum.';
+COMMENT ON TABLE  "STU_PREF" IS  'Contains main measures list and attributes';
+COMMENT ON COLUMN "STU_PREF"."PREF_ID"    IS 'Primary Key ID';
+COMMENT ON COLUMN "STU_PREF"."CREATED_BY" IS 'Standard Who/When';
+COMMENT ON COLUMN "STU_PREF"."CREATED_ON" IS 'Standard Who/When';
+COMMENT ON COLUMN "STU_PREF"."UPDATED_BY" IS 'Standard Who/When';
+COMMENT ON COLUMN "STU_PREF"."UPDATED_ON" IS 'Standard Who/When';
+COMMENT ON COLUMN "STU_PREF"."REVISION"   IS 'Standard Used to determine if a message was updated.';
 

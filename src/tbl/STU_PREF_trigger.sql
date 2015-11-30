@@ -13,20 +13,20 @@ BEGIN
     END IF;
     :NEW.CREATED_ON := SYSDATE;
     :NEW.CREATED_BY := nvl(wwv_flow.g_user,nvl(:NEW.CREATED_BY,USER));
-    IF :NEW.VALUE_PW IS NOT NULL THEN
-      :NEW.PW_RAW := STU_PREF_UTIL.encrypt(P_VALUE => :NEW.VALUE_PW,
-                                             P_KEY => :NEW.PREF_ID);
-      :NEW.VALUE_PW:=NULL;
+    IF :NEW.PASSWORD_TEMP IS NOT NULL THEN
+      :NEW.PASSWORD_ENC := STU_PREF_UTIL.encrypt(P_VALUE => :NEW.PASSWORD_TEMP,
+                                                 P_KEY   => :NEW.PREF_ID);
+      :NEW.PASSWORD_TEMP:=NULL;
     END IF;
   END IF;
 
   IF UPDATING THEN
     :NEW.UPDATED_ON := SYSDATE;
     :NEW.UPDATED_BY := nvl(wwv_flow.g_user,nvl(:NEW.UPDATED_BY,USER));
-    IF :NEW.VALUE_PW IS NOT NULL THEN
-      :NEW.PW_RAW := STU_PREF_UTIL.encrypt(P_VALUE => :NEW.VALUE_PW,
-                                             P_KEY => :NEW.PREF_ID);
-      :NEW.VALUE_PW:=NULL;
+    IF :NEW.PASSWORD_TEMP IS NOT NULL THEN
+      :NEW.PASSWORD_ENC := STU_PREF_UTIL.encrypt(P_VALUE => :NEW.PASSWORD_TEMP,
+                                                 P_KEY   => :NEW.PREF_ID);
+      :NEW.PASSWORD_TEMP:=NULL;
     END IF;
   END IF;
  

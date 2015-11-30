@@ -5,7 +5,7 @@ PACKAGE BODY STU_PREF_UTIL AS
 
 ---------------------------------------------------------------------
 --
---               Copyright(C) 2015 T. St. Hilaire
+--               Copyright(C) 2015 Tim St. Hilaire
 --                         All Rights Reserved
 -- 
 ---------------------------------------------------------------------
@@ -17,6 +17,7 @@ PACKAGE BODY STU_PREF_UTIL AS
 --  Comments:       
 -----------------------------------------------------------------------
 --
+-- 1.3    20-NOV-2015   Updated to STU_PREF for GitHub
 -- 1.2    04-OCT-2014   Next revision with improved update capabilities
 -- 1.1    01-SEP-2014   Simplified table (hard to beleive)
 -----------------------------------------------------------------------
@@ -25,63 +26,39 @@ PACKAGE BODY STU_PREF_UTIL AS
 --< PRIVATE TYPES AND GLOBALS >--------------------------------------
 --=====================================================================
 
-  gn_debug_level               NUMBER; -- store the value of the DEBUG setting for the session
-  --gn_debug_purge               NUMBER; -- only run the log purge once per session
 
 --=====================================================================
 --< PRIVATE METHODS >==================================================
 --=====================================================================
 
-  -------------------------------------------------------------------
-  --< DEBUG >--------------------------------------------------------
-  -------------------------------------------------------------------
-  --  Purpose : Put the if logic here to simplify code
-  --
-  --  Comments:
-  --
-  -------------------------------------------------------------------
-  PROCEDURE DEBUG (p_message VARCHAR2, p_level NUMBER DEFAULT 1)
-  IS
-    -- PRAGMA AUTONOMOUS_TRANSACTION; -- only use for custom table logging when needed
-  BEGIN
-    
-    -- fetch the debug setting only once
-    if gn_debug_level IS NULL THEN
-      -- read the debug setting from source
-      gn_debug_level:=nvl(GET_PREF_NUMBER('DEBUG_LOG_LEVEL'),-1); 
-    end if; 
+-------------------------------------------------------------------------------
+--< LOG >----------------------------------------------------------------------
+-------------------------------------------------------------------------------
+--  Purpose : Put the if logic here to simplify code
+--
+--  Comments:
+--
+-------------------------------------------------------------------------------
+PROCEDURE LOG (
+  p_message VARCHAR2, 
+  p_level NUMBER DEFAULT 1, 
+  p_marker VARCHAR2 DEFAULT NULL
+)
+IS
+  -- PRAGMA AUTONOMOUS_TRANSACTION; -- only use for custom table logging when needed
+  lv_message VARCHAR2(32767);
+BEGIN
+    -- alter the message
+    lv_message:= substr($$PLSQL_UNIT||':'|| p_marker||':'||p_message,1,2000);
 
-    -- log debug messages when > 0
-    -- only log if the current level is higher than the requested level
-    IF gn_debug_level >= p_level THEN
-      
-      -- 
-      --logger.log('STU_PREF_UTIL: ' ||p_message);
-      
-      -- to show in APEX logs
-      apex_application.debug(p_message);
-      
-      -- to show on SQL*PLUS logging - testing ONLY
-      --DBMS_OUTPUT.PUT_LINE('STU_PREF_UTIL: ' ||p_message);
-      
-      -- custom table example  -- use LOGGER if it is an option
-      /*\
-      INSERT INTO LDAP_LOGGER (LOG_LINE)  VALUES ( 'STU_PREF_UTIL: ' ||p_message);
-      
-      IF gn_debug_purge IS NULL THEN
-         gn_debug_purge :=1;
-         -- only purge the log once per session connection
-         DELETE FROM LDAP_LOGGER WHERE CREATED_ON < trunc(sysdate-14);
-         INSERT INTO LDAP_LOGGER (LOG_LINE)  VALUES ( 'STU_PREF_UTIL: LDAP_LOGGER PURGE older than 14 days.' );   
-      END IF;
-      \*/
+    -- logger.log(lv_message);
+    -- STU_SIMPLE_LOG_UTIL.WRITE(lv_message,p_level);
     
-    END IF;
-    
-    -- NOTE:  PRAGMA AUTONOMOUS_TRANSACTION;
-    -- commit; -- only use for custom table logging when needed
+    -- to show in APEX logs
+    apex_application.debug(lv_message);
 
-  END DEBUG;
+END LOG;
+
 
 
 --=====================================================================
@@ -104,10 +81,16 @@ BEGIN
 
   lt_record := GET_RECORD (p_name => p_name);
   
-  if lt_record.PREF_NAME IS NULL then
-    -- new record name to set
-    lt_record.PREF_NAME := p_name;
-  end if;
+  IF lt_record.PREF_NAME IS NULL 
+  THEN
+    IF STU_PREF_UTIL.GET_PREF_VALUE(p_name=>'STU_PREF-CreateOnSet')='Y'
+    THEN
+      -- new record name to set
+      lt_record.PREF_NAME := p_name;
+    ELSE
+      RETURN;
+    END IF;
+  END IF;
 
   -- set new value
   lt_record.value1:=p_value;
@@ -133,10 +116,16 @@ BEGIN
 
   lt_record := GET_RECORD (p_name => p_name);
   
-  if lt_record.PREF_NAME IS NULL then
-    -- new record name to set
-    lt_record.PREF_NAME := p_name;
-  end if;
+  IF lt_record.PREF_NAME IS NULL 
+  THEN
+    IF STU_PREF_UTIL.GET_PREF_VALUE(p_name=>'STU_PREF-CreateOnSet')='Y'
+    THEN
+      -- new record name to set
+      lt_record.PREF_NAME := p_name;
+    ELSE
+      RETURN;
+    END IF;
+  END IF;
 
   -- set new value
   lt_record.number1:=p_value;
@@ -162,10 +151,16 @@ BEGIN
 
   lt_record := GET_RECORD (p_name => p_name);
   
-  if lt_record.PREF_NAME IS NULL then
-    -- new record name to set
-    lt_record.PREF_NAME := p_name;
-  end if;
+  IF lt_record.PREF_NAME IS NULL 
+  THEN
+    IF STU_PREF_UTIL.GET_PREF_VALUE(p_name=>'STU_PREF-CreateOnSet')='Y'
+    THEN
+      -- new record name to set
+      lt_record.PREF_NAME := p_name;
+    ELSE
+      RETURN;
+    END IF;
+  END IF;
 
   -- set new value
   lt_record.date1:=p_value;
@@ -181,7 +176,8 @@ END SET_PREF;
 --  Purpose : Get the settings value form the setting table
 --
 --  Comments:
---
+--  A version of this used to contain more than one value.  
+--  This feature has been removed
 -------------------------------------------------------------------
 FUNCTION GET_PREF_VALUE ( p_name  VARCHAR2) RETURN STU_PREF.value1%TYPE
 IS
@@ -193,7 +189,8 @@ BEGIN
   SELECT value1
     INTO l_value1
     FROM STU_PREF 
-   WHERE PREF_NAME = p_name;
+   WHERE PREF_NAME = p_name
+     AND API_VIEW = 'Y';
 
   -- Option:if preference will contain more than one of each... 
   -- CASE p_value
@@ -220,7 +217,8 @@ END GET_PREF_VALUE;
 --  Purpose : Get the settings value form the setting table
 --
 --  Comments:
---
+--  A version of this used to contain more than one value.  
+--  This feature has been removed
 -------------------------------------------------------------------
 FUNCTION GET_PREF_NUMBER ( p_name  VARCHAR2) RETURN STU_PREF.number1%TYPE
 IS
@@ -232,7 +230,8 @@ BEGIN
   SELECT number1
     INTO l_number1
     FROM STU_PREF 
-   WHERE PREF_NAME = p_name;
+   WHERE PREF_NAME = p_name
+     AND API_VIEW = 'Y';
 
   RETURN l_number1;
 
@@ -248,7 +247,8 @@ END GET_PREF_NUMBER;
 --  Purpose : Get the settings value form the setting table
 --
 --  Comments:
---
+--  A version of this used to contain more than one value.  
+--  This feature has been removed
 -------------------------------------------------------------------
 FUNCTION GET_PREF_DATE ( p_name  VARCHAR2) RETURN STU_PREF.date1%TYPE
 IS
@@ -260,7 +260,8 @@ BEGIN
   SELECT date1
     INTO l_date1
     FROM STU_PREF 
-   WHERE PREF_NAME = p_name;
+   WHERE PREF_NAME = p_name
+     AND API_VIEW = 'Y';
 
   RETURN l_date1;
 
@@ -306,7 +307,7 @@ BEGIN
   RETURN rtrim(l_value,chr(0));
 EXCEPTION
   WHEN others THEN
-    debug(3, 'DECRYPT: Error when decrypting value:'|| p_key);
+    log('Error when decrypting value:'|| p_key,3,'DECRYPT');
     RETURN NULL;
 END DECRYPT;
 
@@ -362,18 +363,18 @@ END encrypt;
   --  Comments:
   --
   -------------------------------------------------------------------
-  FUNCTION GET_PREF_PW ( p_name VARCHAR2) RETURN STU_PREF.VALUE_PW%TYPE
+  FUNCTION GET_PREF_PW ( p_name VARCHAR2) RETURN STU_PREF.PASSWORD_TEMP%TYPE
   IS
-    l_value_raw STU_PREF.PW_RAW%TYPE;
+    l_value_raw STU_PREF.PASSWORD_ENC%TYPE;
     l_id        STU_PREF.PREF_ID%TYPE;
-    l_return    STU_PREF.VALUE_PW%TYPE;
+    l_return    STU_PREF.PASSWORD_TEMP%TYPE;
   BEGIN
     
-    SELECT PW_RAW, PREF_ID
+    SELECT PASSWORD_ENC, PREF_ID
     INTO   l_value_raw, l_id
     FROM   STU_PREF 
     WHERE  PREF_NAME = p_name
-      AND  PW_RAW IS NOT NULL;
+      AND  PASSWORD_ENC IS NOT NULL;
     
     l_return:=decrypt(l_value_raw,l_id);
 
@@ -408,10 +409,11 @@ BEGIN
     VALUE1       ,
     NUMBER1      ,
     DATE1        ,
-    VALUE_PW     ,
-    -- PW_RAW       , -- managed by trigger
+    PASSWORD_TEMP,
+    -- PASSWORD_ENC       , -- managed by trigger
     DESCRIPTION  ,
-    USER_EDIT  
+    API_EDIT     ,  
+    API_VIEW  
     -- CREATED_BY   ,-- managed by trigger
     -- CREATED_ON   ,-- managed by trigger
     -- UPDATED_BY   ,-- managed by trigger
@@ -420,12 +422,13 @@ BEGIN
   VALUES
   (
     trim(p_record.PREF_NAME),
-    trim(p_record.VALUE1   ),
-    p_record.NUMBER1      ,
-    p_record.DATE1        ,
-    p_record.VALUE_PW     ,
+    trim(p_record.VALUE1),
+    p_record.NUMBER1,
+    p_record.DATE1,
+    p_record.PASSWORD_TEMP,
     trim(p_record.DESCRIPTION) ,
-    p_record.USER_EDIT  
+    nvl(p_record.API_EDIT,'Y'),  
+    nvl(p_record.API_VIEW,'Y')
   )
   RETURNING PREF_ID
   INTO p_id;
@@ -452,29 +455,34 @@ BEGIN
                 SELECT 'X'
                   FROM STU_PREF
                  WHERE PREF_ID = p_record.PREF_ID 
+                   -- if this flag is set - Edit only through UI
+                   AND p_record.API_EDIT = 'Y' 
                    -- check to see if there is any difference
                    AND (
-                      p_record.VALUE_PW is not null
+                      p_record.PASSWORD_TEMP is not null
                     OR DECODE(PREF_NAME,p_record.PREF_NAME,'SAME','DIFF')='DIFF'
                     OR DECODE(VALUE1,p_record.VALUE1,'SAME','DIFF')='DIFF'
                     OR DECODE(NUMBER1,p_record.NUMBER1,'SAME','DIFF')='DIFF'
                     OR DECODE(DATE1,p_record.DATE1,'SAME','DIFF')='DIFF'
                     OR DECODE(DESCRIPTION,p_record.DESCRIPTION,'SAME','DIFF')='DIFF'
-                    OR DECODE(USER_EDIT,p_record.USER_EDIT,'SAME','DIFF')='DIFF'
+                    OR DECODE(API_EDIT,p_record.API_EDIT,'SAME','DIFF')='DIFF'
+                    OR DECODE(API_VIEW,p_record.API_VIEW,'SAME','DIFF')='DIFF'
+                    OR DECODE(REVISION,p_record.REVISION,'SAME','DIFF')='DIFF'
                    )
                 )
   LOOP
   
     -- Only update if something changed
     UPDATE STU_PREF SET
-      PREF_NAME    = p_record.PREF_NAME,
-      VALUE1       = p_record.VALUE1,
-      NUMBER1      = p_record.NUMBER1,
-      DATE1        = p_record.DATE1,
-      VALUE_PW     = p_record.VALUE_PW,
-      DESCRIPTION  = p_record.DESCRIPTION,
-      USER_EDIT    = p_record.USER_EDIT
-    WHERE PREF_ID  = p_record.PREF_ID;
+      PREF_NAME     = p_record.PREF_NAME,
+      VALUE1        = p_record.VALUE1,
+      NUMBER1       = p_record.NUMBER1,
+      DATE1         = p_record.DATE1,
+      PASSWORD_TEMP = p_record.PASSWORD_TEMP,
+      DESCRIPTION   = p_record.DESCRIPTION,
+      API_EDIT      = p_record.API_EDIT,
+      API_VIEW      = p_record.API_VIEW
+    WHERE PREF_ID   = p_record.PREF_ID;
   
   END LOOP;
 
@@ -502,17 +510,20 @@ BEGIN
       VALUE1,     
       NUMBER1,    
       DATE1,      
-      NULL as VALUE_PW,   
-      NULL as PW_RAW,     
+      NULL as PASSWORD_TEMP,   /* active choice to not pass value */
+      NULL as PASSWORD_ENC,    /* active choice to not pass value */ 
       DESCRIPTION,
-      USER_EDIT,
+      API_EDIT,
+      API_VIEW,
       CREATED_BY, 
       CREATED_ON, 
       UPDATED_BY, 
-      UPDATED_ON 
+      UPDATED_ON,
+      REVISION 
   INTO lt_pref_record
   FROM STU_PREF
-  WHERE PREF_ID = p_id;
+  WHERE PREF_ID = p_id
+    AND API_VIEW = 'Y';
 
   -- additional security can be added as needed
   -- clear Password
@@ -547,17 +558,20 @@ BEGIN
       VALUE1,     
       NUMBER1,    
       DATE1,      
-      NULL as VALUE_PW,   
-      NULL as PW_RAW,     
+      NULL as PASSWORD_TEMP,   /* active choice to not pass value */
+      NULL as PASSWORD_ENC,    /* active choice to not pass value */ 
       DESCRIPTION,
-      USER_EDIT,
+      API_EDIT,
+      API_VIEW,
       CREATED_BY, 
       CREATED_ON, 
       UPDATED_BY, 
-      UPDATED_ON 
+      UPDATED_ON,
+      REVISION 
   INTO lt_pref_record
   FROM STU_PREF
-  WHERE PREF_NAME = p_name;
+  WHERE PREF_NAME = p_name
+    AND API_VIEW = 'Y';
 
   -- additional security can be added as needed
   -- clear Password
@@ -653,8 +667,9 @@ IS
 BEGIN
   
   -- additional protections can be placed here
-  DELETE FROM STU_PREF where PREF_ID = p_id;
-
+  DELETE FROM STU_PREF 
+  WHERE PREF_ID = p_id
+  AND API_EDIT = 'Y';
 
 END DELETE_RECORD;
 
