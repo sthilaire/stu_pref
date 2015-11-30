@@ -12,7 +12,7 @@ prompt  APPLICATION 129 - STU_PREF
 -- Application Export:
 --   Application:     129
 --   Name:            STU_PREF
---   Date and Time:   11:19 Tuesday October 6, 2015
+--   Date and Time:   04:05 Monday November 30, 2015
 --   Exported By:     ADMIN
 --   Flashback:       0
 --   Export Type:     Application Export
@@ -26,9 +26,9 @@ prompt  APPLICATION 129 - STU_PREF
  
 -- Application Statistics:
 --   Pages:                      3
---     Items:                   16
+--     Items:                   21
 --     Processes:                7
---     Regions:                  3
+--     Regions:                  5
 --     Buttons:                  5
 --   Shared Components:
 --     Logic:
@@ -154,7 +154,7 @@ wwv_flow_api.create_flow(
   p_alias => nvl(wwv_flow_application_install.get_application_alias,'F_129129'),
   p_page_view_logging => 'YES',
   p_page_protection_enabled_y_n=> 'Y',
-  p_checksum_salt_last_reset => '20151006111920',
+  p_checksum_salt_last_reset => '20151130040537',
   p_max_session_length_sec=> null,
   p_compatibility_mode=> '4.2',
   p_html_escaping_mode=> 'E',
@@ -175,9 +175,9 @@ wwv_flow_api.create_flow(
   p_proxy_server=> nvl(wwv_flow_application_install.get_proxy,''),
   p_cust_authentication_process=> '',
   p_cust_authentication_page=> '',
-  p_flow_version=> 'release 1.0',
+  p_flow_version=> 'YYYY.MM.DD',
   p_flow_status=> 'AVAILABLE_W_EDIT_LINK',
-  p_flow_unavailable_text=> '',
+  p_flow_unavailable_text=> 'This application is currently unavailable at this time.',
   p_build_status=> 'RUN_AND_BUILD',
   p_exact_substitutions_only=> 'Y',
   p_browser_cache=>'N',
@@ -190,7 +190,7 @@ wwv_flow_api.create_flow(
   p_include_legacy_javascript=> 'Y',
   p_default_error_display_loc=> 'INLINE_WITH_FIELD_AND_NOTIFICATION',
   p_last_updated_by => 'ADMIN',
-  p_last_upd_yyyymmddhh24miss=> '20151006111920',
+  p_last_upd_yyyymmddhh24miss=> '20151130040537',
   p_ui_type_name => null,
   p_required_roles=> wwv_flow_utilities.string_to_table2(''));
  
@@ -422,7 +422,7 @@ wwv_flow_api.create_page (
  ,p_help_text => 
 'No help is available for this page.'
  ,p_last_updated_by => 'ADMIN'
- ,p_last_upd_yyyymmddhh24miss => '20151004170312'
+ ,p_last_upd_yyyymmddhh24miss => '20151129205144'
   );
 null;
  
@@ -435,25 +435,25 @@ declare
   l_length number := 1;
 begin
 s:=s||'select '||unistr('\000a')||
-'CASE WHEN USER_EDIT=''Y'' THEN''<img src="#IMAGE_PREFIX#e2.gif"  border="0">'''||unistr('\000a')||
-'END as Edit_Link,'||unistr('\000a')||
+'--CASE WHEN API_EDIT=''Y'' THEN''<img src="#IMAGE_PREFIX#e2.gif"  border="0">''END as Edit_Link,'||unistr('\000a')||
+'''Y'' as Edit_Link,'||unistr('\000a')||
 '"PREF_ID", '||unistr('\000a')||
 '"PREF_NAME",'||unistr('\000a')||
 'substr(VALUE1,1,20)||decode(substr(VALUE1,21,1),null,null,''...'')'||unistr('\000a')||
 'as "VALUE1",'||unistr('\000a')||
 '"NUMBER1",'||unistr('\000a')||
 '"DATE1",'||unistr('\000a')||
-'"VALUE_PW",'||unistr('\000a')||
-'nvl2("PW_RAW",''***'',NULL) as PW_RAW,'||unistr('\000a')||
+'nvl2("PASSWORD_ENC",''***'',NULL) as PW_RAW,'||unistr('\000a')||
 'substr(DESCRIPTION, 1, 40)||decode(substr(DESCRIPTION, 41,1),null,null,''...'')'||unistr('\000a')||
 'as "DESCRIPTION",'||unistr('\000a')||
-'"USER_EDIT",'||unistr('\000a')||
-'"CREATED_BY",'||unistr('\000a')||
-'"CRE';
+'"API_EDIT",'||unistr('\000a')||
+'"CREATE';
 
-s:=s||'ATED_ON",'||unistr('\000a')||
+s:=s||'D_BY",'||unistr('\000a')||
+'"CREATED_ON",'||unistr('\000a')||
 '"UPDATED_BY",'||unistr('\000a')||
-'"UPDATED_ON"'||unistr('\000a')||
+'"UPDATED_ON",'||unistr('\000a')||
+'REVISION'||unistr('\000a')||
 'from "#OWNER#"."STU_PREF" '||unistr('\000a')||
 '  '||unistr('\000a')||
 '';
@@ -490,25 +490,25 @@ declare
  a1 varchar2(32767) := null;
 begin
 a1:=a1||'select '||unistr('\000a')||
-'CASE WHEN USER_EDIT=''Y'' THEN''<img src="#IMAGE_PREFIX#e2.gif"  border="0">'''||unistr('\000a')||
-'END as Edit_Link,'||unistr('\000a')||
+'--CASE WHEN API_EDIT=''Y'' THEN''<img src="#IMAGE_PREFIX#e2.gif"  border="0">''END as Edit_Link,'||unistr('\000a')||
+'''Y'' as Edit_Link,'||unistr('\000a')||
 '"PREF_ID", '||unistr('\000a')||
 '"PREF_NAME",'||unistr('\000a')||
 'substr(VALUE1,1,20)||decode(substr(VALUE1,21,1),null,null,''...'')'||unistr('\000a')||
 'as "VALUE1",'||unistr('\000a')||
 '"NUMBER1",'||unistr('\000a')||
 '"DATE1",'||unistr('\000a')||
-'"VALUE_PW",'||unistr('\000a')||
-'nvl2("PW_RAW",''***'',NULL) as PW_RAW,'||unistr('\000a')||
+'nvl2("PASSWORD_ENC",''***'',NULL) as PW_RAW,'||unistr('\000a')||
 'substr(DESCRIPTION, 1, 40)||decode(substr(DESCRIPTION, 41,1),null,null,''...'')'||unistr('\000a')||
 'as "DESCRIPTION",'||unistr('\000a')||
-'"USER_EDIT",'||unistr('\000a')||
-'"CREATED_BY",'||unistr('\000a')||
-'"CRE';
+'"API_EDIT",'||unistr('\000a')||
+'"CREATE';
 
-a1:=a1||'ATED_ON",'||unistr('\000a')||
+a1:=a1||'D_BY",'||unistr('\000a')||
+'"CREATED_ON",'||unistr('\000a')||
 '"UPDATED_BY",'||unistr('\000a')||
-'"UPDATED_ON"'||unistr('\000a')||
+'"UPDATED_ON",'||unistr('\000a')||
+'REVISION'||unistr('\000a')||
 'from "#OWNER#"."STU_PREF" '||unistr('\000a')||
 '  '||unistr('\000a')||
 '';
@@ -759,43 +759,6 @@ end;
 /
 begin
 wwv_flow_api.create_worksheet_column(
-  p_id => 21541261950684952+wwv_flow_api.g_id_offset,
-  p_flow_id=> wwv_flow.g_flow_id,
-  p_page_id=> 1,
-  p_worksheet_id => 21540660384684946+wwv_flow_api.g_id_offset,
-  p_db_column_name         =>'VALUE_PW',
-  p_display_order          =>6,
-  p_column_identifier      =>'F',
-  p_column_label           =>'Value Pw',
-  p_report_label           =>'Value Pw',
-  p_sync_form_label        =>'Y',
-  p_display_in_default_rpt =>'Y',
-  p_is_sortable            =>'Y',
-  p_allow_sorting          =>'Y',
-  p_allow_filtering        =>'Y',
-  p_allow_highlighting     =>'Y',
-  p_allow_ctrl_breaks      =>'Y',
-  p_allow_aggregations     =>'Y',
-  p_allow_computations     =>'Y',
-  p_allow_charting         =>'Y',
-  p_allow_group_by         =>'Y',
-  p_allow_hide             =>'Y',
-  p_others_may_edit        =>'Y',
-  p_others_may_view        =>'Y',
-  p_column_type            =>'STRING',
-  p_display_as             =>'TEXT',
-  p_display_text_as        =>'ESCAPE_SC',
-  p_heading_alignment      =>'CENTER',
-  p_column_alignment       =>'LEFT',
-  p_tz_dependent           =>'N',
-  p_rpt_distinct_lov       =>'Y',
-  p_rpt_show_filter_lov    =>'D',
-  p_rpt_filter_date_ranges =>'ALL',
-  p_help_text              =>'');
-end;
-/
-begin
-wwv_flow_api.create_worksheet_column(
   p_id => 21541465260684952+wwv_flow_api.g_id_offset,
   p_flow_id=> wwv_flow.g_flow_id,
   p_page_id=> 1,
@@ -805,43 +768,6 @@ wwv_flow_api.create_worksheet_column(
   p_column_identifier      =>'H',
   p_column_label           =>'Description',
   p_report_label           =>'Description',
-  p_sync_form_label        =>'Y',
-  p_display_in_default_rpt =>'Y',
-  p_is_sortable            =>'Y',
-  p_allow_sorting          =>'Y',
-  p_allow_filtering        =>'Y',
-  p_allow_highlighting     =>'Y',
-  p_allow_ctrl_breaks      =>'Y',
-  p_allow_aggregations     =>'Y',
-  p_allow_computations     =>'Y',
-  p_allow_charting         =>'Y',
-  p_allow_group_by         =>'Y',
-  p_allow_hide             =>'Y',
-  p_others_may_edit        =>'Y',
-  p_others_may_view        =>'Y',
-  p_column_type            =>'STRING',
-  p_display_as             =>'TEXT',
-  p_display_text_as        =>'ESCAPE_SC',
-  p_heading_alignment      =>'CENTER',
-  p_column_alignment       =>'LEFT',
-  p_tz_dependent           =>'N',
-  p_rpt_distinct_lov       =>'Y',
-  p_rpt_show_filter_lov    =>'D',
-  p_rpt_filter_date_ranges =>'ALL',
-  p_help_text              =>'');
-end;
-/
-begin
-wwv_flow_api.create_worksheet_column(
-  p_id => 21541555244684952+wwv_flow_api.g_id_offset,
-  p_flow_id=> wwv_flow.g_flow_id,
-  p_page_id=> 1,
-  p_worksheet_id => 21540660384684946+wwv_flow_api.g_id_offset,
-  p_db_column_name         =>'USER_EDIT',
-  p_display_order          =>9,
-  p_column_identifier      =>'I',
-  p_column_label           =>'User Edit',
-  p_report_label           =>'User Edit',
   p_sync_form_label        =>'Y',
   p_display_in_default_rpt =>'Y',
   p_is_sortable            =>'Y',
@@ -1067,7 +993,7 @@ wwv_flow_api.create_worksheet_column(
   p_sync_form_label        =>'Y',
   p_display_in_default_rpt =>'Y',
   p_column_link            =>'f?p=&APP_ID.:2:&SESSION.::&DEBUG.:2:P2_PREF_ID:#PREF_ID#',
-  p_column_linktext        =>'#EDIT_LINK#',
+  p_column_linktext        =>'<img src="#IMAGE_PREFIX#e2.gif" alt="">',
   p_is_sortable            =>'Y',
   p_allow_sorting          =>'Y',
   p_allow_filtering        =>'Y',
@@ -1092,10 +1018,84 @@ wwv_flow_api.create_worksheet_column(
   p_help_text              =>'');
 end;
 /
+begin
+wwv_flow_api.create_worksheet_column(
+  p_id => 7537101897607444+wwv_flow_api.g_id_offset,
+  p_flow_id=> wwv_flow.g_flow_id,
+  p_page_id=> 1,
+  p_worksheet_id => 21540660384684946+wwv_flow_api.g_id_offset,
+  p_db_column_name         =>'API_EDIT',
+  p_display_order          =>16,
+  p_column_identifier      =>'P',
+  p_column_label           =>'Api Edit',
+  p_report_label           =>'Api Edit',
+  p_sync_form_label        =>'Y',
+  p_display_in_default_rpt =>'Y',
+  p_is_sortable            =>'Y',
+  p_allow_sorting          =>'Y',
+  p_allow_filtering        =>'Y',
+  p_allow_highlighting     =>'Y',
+  p_allow_ctrl_breaks      =>'Y',
+  p_allow_aggregations     =>'Y',
+  p_allow_computations     =>'Y',
+  p_allow_charting         =>'Y',
+  p_allow_group_by         =>'Y',
+  p_allow_hide             =>'Y',
+  p_others_may_edit        =>'Y',
+  p_others_may_view        =>'Y',
+  p_column_type            =>'STRING',
+  p_display_as             =>'TEXT',
+  p_display_text_as        =>'ESCAPE_SC',
+  p_heading_alignment      =>'CENTER',
+  p_column_alignment       =>'LEFT',
+  p_tz_dependent           =>'N',
+  p_rpt_distinct_lov       =>'Y',
+  p_rpt_show_filter_lov    =>'D',
+  p_rpt_filter_date_ranges =>'ALL',
+  p_help_text              =>'');
+end;
+/
+begin
+wwv_flow_api.create_worksheet_column(
+  p_id => 7537219218607446+wwv_flow_api.g_id_offset,
+  p_flow_id=> wwv_flow.g_flow_id,
+  p_page_id=> 1,
+  p_worksheet_id => 21540660384684946+wwv_flow_api.g_id_offset,
+  p_db_column_name         =>'REVISION',
+  p_display_order          =>17,
+  p_column_identifier      =>'Q',
+  p_column_label           =>'Revision',
+  p_report_label           =>'Revision',
+  p_sync_form_label        =>'Y',
+  p_display_in_default_rpt =>'Y',
+  p_is_sortable            =>'Y',
+  p_allow_sorting          =>'Y',
+  p_allow_filtering        =>'Y',
+  p_allow_highlighting     =>'Y',
+  p_allow_ctrl_breaks      =>'Y',
+  p_allow_aggregations     =>'Y',
+  p_allow_computations     =>'Y',
+  p_allow_charting         =>'Y',
+  p_allow_group_by         =>'Y',
+  p_allow_hide             =>'Y',
+  p_others_may_edit        =>'Y',
+  p_others_may_view        =>'Y',
+  p_column_type            =>'NUMBER',
+  p_display_as             =>'TEXT',
+  p_display_text_as        =>'ESCAPE_SC',
+  p_heading_alignment      =>'CENTER',
+  p_column_alignment       =>'RIGHT',
+  p_tz_dependent           =>'N',
+  p_rpt_distinct_lov       =>'Y',
+  p_rpt_show_filter_lov    =>'D',
+  p_rpt_filter_date_ranges =>'ALL',
+  p_help_text              =>'');
+end;
+/
 declare
     rc1 varchar2(32767) := null;
 begin
-rc1:=rc1||'EDIT_LINK:PREF_NAME:DESCRIPTION:VALUE1:NUMBER1:DATE1:PW_RAW:USER_EDIT:UPDATED_ON:';
+rc1:=rc1||'EDIT_LINK:PREF_NAME:DESCRIPTION:VALUE1:NUMBER1:DATE1:PW_RAW:UPDATED_ON:API_EDIT:REVISION';
 
 wwv_flow_api.create_worksheet_rpt(
   p_id => 21542369230685405+wwv_flow_api.g_id_offset,
@@ -1192,13 +1192,79 @@ wwv_flow_api.create_page (
  ,p_help_text => 
 'No help is available for this page.'
  ,p_last_updated_by => 'ADMIN'
- ,p_last_upd_yyyymmddhh24miss => '20151004190646'
+ ,p_last_upd_yyyymmddhh24miss => '20151130040303'
   );
 null;
  
 end;
 /
 
+declare
+  s varchar2(32767) := null;
+  l_clob clob;
+  l_length number := 1;
+begin
+s := null;
+wwv_flow_api.create_page_plug (
+  p_id=> 7538104593640355 + wwv_flow_api.g_id_offset,
+  p_flow_id=> wwv_flow.g_flow_id,
+  p_page_id=> 2,
+  p_plug_name=> 'Tracking',
+  p_region_name=>'',
+  p_escape_on_http_output=>'Y',
+  p_plug_template=> 14441324829978402+ wwv_flow_api.g_id_offset,
+  p_plug_display_sequence=> 40,
+  p_plug_new_grid         => false,
+  p_plug_new_grid_row     => true,
+  p_plug_new_grid_column  => true,
+  p_plug_display_column=> null,
+  p_plug_display_point=> 'BODY_3',
+  p_plug_item_display_point=> 'ABOVE',
+  p_plug_source=> s,
+  p_plug_source_type=> 'STATIC_TEXT',
+  p_translate_title=> 'Y',
+  p_plug_query_row_template=> 1,
+  p_plug_query_headings_type=> 'COLON_DELMITED_LIST',
+  p_plug_query_row_count_max => 500,
+  p_plug_display_condition_type => '',
+  p_plug_customized=>'0',
+  p_plug_caching=> 'NOT_CACHED',
+  p_plug_comment=> '');
+end;
+/
+declare
+  s varchar2(32767) := null;
+  l_clob clob;
+  l_length number := 1;
+begin
+s := null;
+wwv_flow_api.create_page_plug (
+  p_id=> 7540204396801073 + wwv_flow_api.g_id_offset,
+  p_flow_id=> wwv_flow.g_flow_id,
+  p_page_id=> 2,
+  p_plug_name=> 'Utilization',
+  p_region_name=>'',
+  p_escape_on_http_output=>'Y',
+  p_plug_template=> 14443216760978403+ wwv_flow_api.g_id_offset,
+  p_plug_display_sequence=> 20,
+  p_plug_new_grid         => false,
+  p_plug_new_grid_row     => false,
+  p_plug_new_grid_column  => true,
+  p_plug_display_column=> null,
+  p_plug_display_point=> 'BODY_3',
+  p_plug_item_display_point=> 'ABOVE',
+  p_plug_source=> s,
+  p_plug_source_type=> 'STATIC_TEXT',
+  p_translate_title=> 'Y',
+  p_plug_query_row_template=> 1,
+  p_plug_query_headings_type=> 'COLON_DELMITED_LIST',
+  p_plug_query_row_count_max => 500,
+  p_plug_display_condition_type => '',
+  p_plug_customized=>'0',
+  p_plug_caching=> 'NOT_CACHED',
+  p_plug_comment=> '');
+end;
+/
 declare
   s varchar2(32767) := null;
   l_clob clob;
@@ -1241,7 +1307,7 @@ wwv_flow_api.create_page_button(
   p_button_plug_id => 21535041828684919+wwv_flow_api.g_id_offset,
   p_button_name    => 'DELETE',
   p_button_action  => 'REDIRECT_URL',
-  p_button_image   => 'template:'||to_char(14453136626978416+wwv_flow_api.g_id_offset),
+  p_button_image   => 'template:'||to_char(14453725023978417+wwv_flow_api.g_id_offset),
   p_button_is_hot=>'N',
   p_button_image_alt=> 'Delete',
   p_button_position=> 'REGION_TEMPLATE_CHANGE',
@@ -1317,6 +1383,19 @@ end;
 begin
  
 wwv_flow_api.create_page_branch(
+  p_id=>7541103449819456 + wwv_flow_api.g_id_offset,
+  p_flow_id=> wwv_flow.g_flow_id,
+  p_flow_step_id=> 2,
+  p_branch_name=> 'Post Apply',
+  p_branch_action=> 'f?p=&APP_ID.:2:&SESSION.::&DEBUG.:::',
+  p_branch_point=> 'AFTER_PROCESSING',
+  p_branch_type=> 'REDIRECT_URL',
+  p_branch_when_button_id=>21535341142684920+ wwv_flow_api.g_id_offset,
+  p_branch_sequence=> 1,
+  p_save_state_before_branch_yn=>'N',
+  p_branch_comment=> '');
+ 
+wwv_flow_api.create_page_branch(
   p_id=>21536542338684927 + wwv_flow_api.g_id_offset,
   p_flow_id=> wwv_flow.g_flow_id,
   p_flow_step_id=> 2,
@@ -1324,9 +1403,249 @@ wwv_flow_api.create_page_branch(
   p_branch_action=> 'f?p=&APP_ID.:1:&SESSION.&success_msg=#SUCCESS_MSG#',
   p_branch_point=> 'AFTER_PROCESSING',
   p_branch_type=> 'REDIRECT_URL',
-  p_branch_sequence=> 1,
+  p_branch_sequence=> 11,
   p_save_state_before_branch_yn=>'N',
   p_branch_comment=> '');
+ 
+ 
+end;
+/
+
+declare
+    h varchar2(32767) := null;
+begin
+wwv_flow_api.create_page_item(
+  p_id=>7537732496623637 + wwv_flow_api.g_id_offset,
+  p_flow_id=> wwv_flow.g_flow_id,
+  p_flow_step_id=> 2,
+  p_name=>'P2_REVISION',
+  p_data_type=> 'VARCHAR',
+  p_is_required=> false,
+  p_accept_processing=> 'REPLACE_EXISTING',
+  p_item_sequence=> 50,
+  p_item_plug_id => 7538104593640355+wwv_flow_api.g_id_offset,
+  p_use_cache_before_default=> 'NO',
+  p_item_default_type=> 'STATIC_TEXT_WITH_SUBSTITUTIONS',
+  p_prompt=>'Revision',
+  p_source=>'REVISION',
+  p_source_type=> 'DB_COLUMN',
+  p_display_as=> 'NATIVE_DISPLAY_ONLY',
+  p_lov_display_null=> 'NO',
+  p_lov_translated=> 'N',
+  p_cSize=> 32,
+  p_cMaxlength=> 255,
+  p_cHeight=> 1,
+  p_new_grid=> false,
+  p_begin_on_new_line=> 'YES',
+  p_begin_on_new_field=> 'YES',
+  p_colspan=> null,
+  p_rowspan=> null,
+  p_grid_column=> null,
+  p_label_alignment=> 'RIGHT',
+  p_field_alignment=> 'LEFT',
+  p_field_template=> 14452714165978414+wwv_flow_api.g_id_offset,
+  p_is_persistent=> 'Y',
+  p_lov_display_extra=>'YES',
+  p_protection_level => 'S',
+  p_escape_on_http_output => 'Y',
+  p_attribute_01 => 'N',
+  p_attribute_02 => 'VALUE',
+  p_attribute_04 => 'Y',
+  p_show_quick_picks=>'N',
+  p_item_comment => '');
+ 
+ 
+end;
+/
+
+declare
+    h varchar2(32767) := null;
+begin
+wwv_flow_api.create_page_item(
+  p_id=>7539919303675292 + wwv_flow_api.g_id_offset,
+  p_flow_id=> wwv_flow.g_flow_id,
+  p_flow_step_id=> 2,
+  p_name=>'P2_API_VIEW',
+  p_data_type=> 'VARCHAR',
+  p_is_required=> false,
+  p_accept_processing=> 'REPLACE_EXISTING',
+  p_item_sequence=> 130,
+  p_item_plug_id => 21535041828684919+wwv_flow_api.g_id_offset,
+  p_use_cache_before_default=> 'NO',
+  p_item_default=> 'Y',
+  p_item_default_type=> 'STATIC_TEXT_WITH_SUBSTITUTIONS',
+  p_prompt=>'API View',
+  p_source=>'API_VIEW',
+  p_source_type=> 'DB_COLUMN',
+  p_display_as=> 'NATIVE_SELECT_LIST',
+  p_named_lov=> 'YES NO',
+  p_lov=> '.'||to_char(14388924310515573 + wwv_flow_api.g_id_offset)||'.',
+  p_lov_display_null=> 'NO',
+  p_lov_translated=> 'N',
+  p_cSize=> 32,
+  p_cMaxlength=> 1,
+  p_cHeight=> 1,
+  p_new_grid=> false,
+  p_begin_on_new_line=> 'YES',
+  p_begin_on_new_field=> 'YES',
+  p_colspan=> null,
+  p_rowspan=> null,
+  p_grid_column=> null,
+  p_label_alignment=> 'RIGHT',
+  p_field_alignment=> 'LEFT',
+  p_field_template=> 14452714165978414+wwv_flow_api.g_id_offset,
+  p_is_persistent=> 'Y',
+  p_lov_display_extra=>'NO',
+  p_protection_level => 'N',
+  p_escape_on_http_output => 'Y',
+  p_attribute_01 => 'NONE',
+  p_attribute_02 => 'N',
+  p_show_quick_picks=>'N',
+  p_item_comment => '');
+ 
+ 
+end;
+/
+
+declare
+    h varchar2(32767) := null;
+begin
+wwv_flow_api.create_page_item(
+  p_id=>7540916388813458 + wwv_flow_api.g_id_offset,
+  p_flow_id=> wwv_flow.g_flow_id,
+  p_flow_step_id=> 2,
+  p_name=>'P2_GET_VALUE',
+  p_data_type=> 'VARCHAR',
+  p_is_required=> false,
+  p_accept_processing=> 'REPLACE_EXISTING',
+  p_item_sequence=> 140,
+  p_item_plug_id => 7540204396801073+wwv_flow_api.g_id_offset,
+  p_use_cache_before_default=> 'YES',
+  p_item_default_type=> 'STATIC_TEXT_WITH_SUBSTITUTIONS',
+  p_prompt=>'Value',
+  p_pre_element_text=>'<pre>STU_PREF_UTIL.GET_PREF_VALUE(p_name=>''&P2_PREF_NAME.'') = ',
+  p_post_element_text=>'</pre>',
+  p_source=>'STU_PREF_UTIL.GET_PREF_VALUE(p_name=>:P2_PREF_NAME)',
+  p_source_type=> 'FUNCTION',
+  p_display_as=> 'NATIVE_DISPLAY_ONLY',
+  p_lov_display_null=> 'NO',
+  p_lov_translated=> 'N',
+  p_cSize=> 30,
+  p_cMaxlength=> 4000,
+  p_cHeight=> 1,
+  p_new_grid=> false,
+  p_begin_on_new_line=> 'YES',
+  p_begin_on_new_field=> 'YES',
+  p_colspan=> null,
+  p_rowspan=> null,
+  p_grid_column=> null,
+  p_label_alignment=> 'RIGHT',
+  p_field_alignment=> 'LEFT-CENTER',
+  p_is_persistent=> 'Y',
+  p_lov_display_extra=>'YES',
+  p_protection_level => 'N',
+  p_escape_on_http_output => 'Y',
+  p_attribute_01 => 'N',
+  p_attribute_02 => 'VALUE',
+  p_attribute_04 => 'Y',
+  p_show_quick_picks=>'N',
+  p_item_comment => '');
+ 
+ 
+end;
+/
+
+declare
+    h varchar2(32767) := null;
+begin
+wwv_flow_api.create_page_item(
+  p_id=>7542428200868740 + wwv_flow_api.g_id_offset,
+  p_flow_id=> wwv_flow.g_flow_id,
+  p_flow_step_id=> 2,
+  p_name=>'P2_GET_NUMBER',
+  p_data_type=> 'VARCHAR',
+  p_is_required=> false,
+  p_accept_processing=> 'REPLACE_EXISTING',
+  p_item_sequence=> 150,
+  p_item_plug_id => 7540204396801073+wwv_flow_api.g_id_offset,
+  p_use_cache_before_default=> 'YES',
+  p_item_default_type=> 'STATIC_TEXT_WITH_SUBSTITUTIONS',
+  p_prompt=>'Number',
+  p_pre_element_text=>'<pre>STU_PREF_UTIL.GET_PREF_NUMBER(p_name=>''&P2_PREF_NAME.'') = ',
+  p_post_element_text=>'</pre>',
+  p_source=>'STU_PREF_UTIL.GET_PREF_NUMBER(p_name=>:P2_PREF_NAME)',
+  p_source_type=> 'FUNCTION',
+  p_display_as=> 'NATIVE_DISPLAY_ONLY',
+  p_lov_display_null=> 'NO',
+  p_lov_translated=> 'N',
+  p_cSize=> 30,
+  p_cMaxlength=> 4000,
+  p_cHeight=> 1,
+  p_new_grid=> false,
+  p_begin_on_new_line=> 'YES',
+  p_begin_on_new_field=> 'YES',
+  p_colspan=> null,
+  p_rowspan=> null,
+  p_grid_column=> null,
+  p_label_alignment=> 'RIGHT',
+  p_field_alignment=> 'LEFT-CENTER',
+  p_is_persistent=> 'Y',
+  p_lov_display_extra=>'YES',
+  p_protection_level => 'N',
+  p_escape_on_http_output => 'Y',
+  p_attribute_01 => 'N',
+  p_attribute_02 => 'VALUE',
+  p_attribute_04 => 'Y',
+  p_show_quick_picks=>'N',
+  p_item_comment => '');
+ 
+ 
+end;
+/
+
+declare
+    h varchar2(32767) := null;
+begin
+wwv_flow_api.create_page_item(
+  p_id=>7542622593871323 + wwv_flow_api.g_id_offset,
+  p_flow_id=> wwv_flow.g_flow_id,
+  p_flow_step_id=> 2,
+  p_name=>'P2_GET_DATE',
+  p_data_type=> 'VARCHAR',
+  p_is_required=> false,
+  p_accept_processing=> 'REPLACE_EXISTING',
+  p_item_sequence=> 160,
+  p_item_plug_id => 7540204396801073+wwv_flow_api.g_id_offset,
+  p_use_cache_before_default=> 'YES',
+  p_item_default_type=> 'STATIC_TEXT_WITH_SUBSTITUTIONS',
+  p_prompt=>'Date',
+  p_pre_element_text=>'<pre>STU_PREF_UTIL.GET_PREF_DATE(p_name=>''&P2_PREF_NAME.'') = ',
+  p_post_element_text=>'</pre>',
+  p_source=>'STU_PREF_UTIL.GET_PREF_DATE(p_name=>:P2_PREF_NAME)',
+  p_source_type=> 'FUNCTION',
+  p_display_as=> 'NATIVE_DISPLAY_ONLY',
+  p_lov_display_null=> 'NO',
+  p_lov_translated=> 'N',
+  p_cSize=> 30,
+  p_cMaxlength=> 4000,
+  p_cHeight=> 1,
+  p_new_grid=> false,
+  p_begin_on_new_line=> 'YES',
+  p_begin_on_new_field=> 'YES',
+  p_colspan=> null,
+  p_rowspan=> null,
+  p_grid_column=> null,
+  p_label_alignment=> 'RIGHT',
+  p_field_alignment=> 'LEFT-CENTER',
+  p_is_persistent=> 'Y',
+  p_lov_display_extra=>'YES',
+  p_protection_level => 'N',
+  p_escape_on_http_output => 'Y',
+  p_attribute_01 => 'N',
+  p_attribute_02 => 'VALUE',
+  p_attribute_04 => 'Y',
+  p_show_quick_picks=>'N',
+  p_item_comment => '');
  
  
 end;
@@ -1352,7 +1671,7 @@ wwv_flow_api.create_page_item(
 ' lv_return   VARCHAR2(32767);'||unistr('\000a')||
 'BEGIN'||unistr('\000a')||
 ' lv_return := ''No Encrypted Value'';'||unistr('\000a')||
-' FOR i_rec in (SELECT ''x'' FROM STU_PREF WHERE PREF_ID = :P2_PREF_ID and PW_RAW IS NOT NULL)'||unistr('\000a')||
+' FOR i_rec in (SELECT ''x'' FROM STU_PREF WHERE PREF_ID = :P2_PREF_ID and PASSWORD_ENC IS NOT NULL)'||unistr('\000a')||
 ' loop'||unistr('\000a')||
 '   lv_return := ''Encrypted Value Saved'';'||unistr('\000a')||
 ' END loop;'||unistr('\000a')||
@@ -1444,7 +1763,6 @@ wwv_flow_api.create_page_item(
   p_use_cache_before_default=> 'NO',
   p_item_default_type=> 'STATIC_TEXT_WITH_SUBSTITUTIONS',
   p_prompt=>'Pref Name',
-  p_post_element_text=>'<div><code>test me </code></div>',
   p_source=>'PREF_NAME',
   p_source_type=> 'DB_COLUMN',
   p_display_as=> 'NATIVE_TEXT_FIELD',
@@ -1577,7 +1895,9 @@ wwv_flow_api.create_page_item(
   p_item_sequence=> 70,
   p_item_plug_id => 21535041828684919+wwv_flow_api.g_id_offset,
   p_use_cache_before_default=> 'NO',
+  p_item_default_type=> 'STATIC_TEXT_WITH_SUBSTITUTIONS',
   p_prompt=>'Date1',
+  p_format_mask=>'DD-MON-YYYY HH:MIPM',
   p_source=>'DATE1',
   p_source_type=> 'DB_COLUMN',
   p_display_as=> 'NATIVE_DATE_PICKER',
@@ -1596,9 +1916,13 @@ wwv_flow_api.create_page_item(
   p_field_alignment=> 'LEFT',
   p_field_template=> 14452714165978414+wwv_flow_api.g_id_offset,
   p_is_persistent=> 'Y',
+  p_lov_display_extra=>'YES',
+  p_protection_level => 'N',
+  p_escape_on_http_output => 'Y',
   p_attribute_04 => 'button',
-  p_attribute_05 => 'N',
-  p_attribute_07 => 'NONE',
+  p_attribute_05 => 'Y',
+  p_attribute_07 => 'MONTH_AND_YEAR',
+  p_show_quick_picks=>'N',
   p_item_comment => '');
  
  
@@ -1619,8 +1943,9 @@ wwv_flow_api.create_page_item(
   p_item_sequence=> 80,
   p_item_plug_id => 21535041828684919+wwv_flow_api.g_id_offset,
   p_use_cache_before_default=> 'NO',
+  p_item_default_type=> 'STATIC_TEXT_WITH_SUBSTITUTIONS',
   p_prompt=>'Value Pw',
-  p_source=>'VALUE_PW',
+  p_source=>'PASSWORD_TEMP',
   p_source_type=> 'DB_COLUMN',
   p_display_as=> 'NATIVE_TEXTAREA',
   p_lov_display_null=> 'NO',
@@ -1638,9 +1963,13 @@ wwv_flow_api.create_page_item(
   p_field_alignment=> 'LEFT',
   p_field_template=> 14452714165978414+wwv_flow_api.g_id_offset,
   p_is_persistent=> 'Y',
+  p_lov_display_extra=>'YES',
+  p_protection_level => 'N',
+  p_escape_on_http_output => 'Y',
   p_attribute_01 => 'Y',
   p_attribute_02 => 'N',
   p_attribute_03 => 'N',
+  p_show_quick_picks=>'N',
   p_item_comment => '');
  
  
@@ -1696,7 +2025,7 @@ wwv_flow_api.create_page_item(
   p_id=>21538169427684938 + wwv_flow_api.g_id_offset,
   p_flow_id=> wwv_flow.g_flow_id,
   p_flow_step_id=> 2,
-  p_name=>'P2_USER_EDIT',
+  p_name=>'P2_API_EDIT',
   p_data_type=> 'VARCHAR',
   p_is_required=> false,
   p_accept_processing=> 'REPLACE_EXISTING',
@@ -1705,8 +2034,8 @@ wwv_flow_api.create_page_item(
   p_use_cache_before_default=> 'NO',
   p_item_default=> 'Y',
   p_item_default_type=> 'STATIC_TEXT_WITH_SUBSTITUTIONS',
-  p_prompt=>'User Edit',
-  p_source=>'USER_EDIT',
+  p_prompt=>'API Edit',
+  p_source=>'API_EDIT',
   p_source_type=> 'DB_COLUMN',
   p_display_as=> 'NATIVE_SELECT_LIST',
   p_named_lov=> 'YES NO',
@@ -1749,8 +2078,8 @@ wwv_flow_api.create_page_item(
   p_data_type=> 'VARCHAR',
   p_is_required=> false,
   p_accept_processing=> 'REPLACE_EXISTING',
-  p_item_sequence=> 130,
-  p_item_plug_id => 21535041828684919+wwv_flow_api.g_id_offset,
+  p_item_sequence=> 10,
+  p_item_plug_id => 7538104593640355+wwv_flow_api.g_id_offset,
   p_use_cache_before_default=> 'NO',
   p_item_default_type=> 'STATIC_TEXT_WITH_SUBSTITUTIONS',
   p_prompt=>'Created By',
@@ -1796,8 +2125,8 @@ wwv_flow_api.create_page_item(
   p_data_type=> 'VARCHAR',
   p_is_required=> false,
   p_accept_processing=> 'REPLACE_EXISTING',
-  p_item_sequence=> 140,
-  p_item_plug_id => 21535041828684919+wwv_flow_api.g_id_offset,
+  p_item_sequence=> 20,
+  p_item_plug_id => 7538104593640355+wwv_flow_api.g_id_offset,
   p_use_cache_before_default=> 'NO',
   p_item_default_type=> 'STATIC_TEXT_WITH_SUBSTITUTIONS',
   p_prompt=>'Created On',
@@ -1843,8 +2172,8 @@ wwv_flow_api.create_page_item(
   p_data_type=> 'VARCHAR',
   p_is_required=> false,
   p_accept_processing=> 'REPLACE_EXISTING',
-  p_item_sequence=> 150,
-  p_item_plug_id => 21535041828684919+wwv_flow_api.g_id_offset,
+  p_item_sequence=> 30,
+  p_item_plug_id => 7538104593640355+wwv_flow_api.g_id_offset,
   p_use_cache_before_default=> 'NO',
   p_item_default_type=> 'STATIC_TEXT_WITH_SUBSTITUTIONS',
   p_prompt=>'Updated By',
@@ -1890,8 +2219,8 @@ wwv_flow_api.create_page_item(
   p_data_type=> 'VARCHAR',
   p_is_required=> false,
   p_accept_processing=> 'REPLACE_EXISTING',
-  p_item_sequence=> 160,
-  p_item_plug_id => 21535041828684919+wwv_flow_api.g_id_offset,
+  p_item_sequence=> 40,
+  p_item_plug_id => 7538104593640355+wwv_flow_api.g_id_offset,
   p_use_cache_before_default=> 'NO',
   p_item_default_type=> 'STATIC_TEXT_WITH_SUBSTITUTIONS',
   p_prompt=>'Updated On',
@@ -2054,7 +2383,8 @@ wwv_flow_api.create_page (
  ,p_step_template => 14394111720978354 + wwv_flow_api.g_id_offset
  ,p_page_is_public_y_n => 'Y'
  ,p_cache_page_yn => 'N'
- ,p_last_upd_yyyymmddhh24miss => '20151004113828'
+ ,p_last_updated_by => 'ADMIN'
+ ,p_last_upd_yyyymmddhh24miss => '20151129220139'
   );
 null;
  
@@ -2066,7 +2396,20 @@ declare
   l_clob clob;
   l_length number := 1;
 begin
-s := null;
+s:=s||'DECLARE'||unistr('\000a')||
+' p_auth_scheme APEX_APPLICATION_AUTH.SCHEME_TYPE%type;'||unistr('\000a')||
+'BEGIN'||unistr('\000a')||
+''||unistr('\000a')||
+'select SCHEME_TYPE '||unistr('\000a')||
+'into p_auth_scheme'||unistr('\000a')||
+'FROM APEX_APPLICATION_AUTH'||unistr('\000a')||
+'WHERE APPLICATION_ID= :APP_ID;'||unistr('\000a')||
+''||unistr('\000a')||
+'htp.br;'||unistr('\000a')||
+'htp.p(''This application is using the authentication Scheme:<b>''|| p_auth_scheme||''</b>'');'||unistr('\000a')||
+''||unistr('\000a')||
+'END;';
+
 wwv_flow_api.create_page_plug (
   p_id=> 21533243416671216 + wwv_flow_api.g_id_offset,
   p_flow_id=> wwv_flow.g_flow_id,
@@ -2083,11 +2426,13 @@ wwv_flow_api.create_page_plug (
   p_plug_display_point=> 'BODY_3',
   p_plug_item_display_point=> 'ABOVE',
   p_plug_source=> s,
-  p_plug_source_type=> 'STATIC_TEXT',
+  p_plug_source_type=> 'PLSQL_PROCEDURE',
+  p_translate_title=> 'Y',
   p_plug_query_row_template=> 1,
   p_plug_query_headings_type=> 'COLON_DELMITED_LIST',
   p_plug_query_row_count_max => 500,
   p_plug_display_condition_type => '',
+  p_plug_customized=>'0',
   p_plug_caching=> 'NOT_CACHED',
   p_plug_comment=> '');
 end;
@@ -15705,12 +16050,52 @@ declare
     s varchar2(32767) := null;
     l_clob clob;
 begin
-s := null;
+s:=s||'DROP PACKAGE STU_PREF_UTIL;'||unistr('\000a')||
+'DROP TABLE STU_PREF CASCADE CONSTRAINTS;';
+
 wwv_flow_api.create_install (
   p_id => 7231614457092106 + wwv_flow_api.g_id_offset,
   p_flow_id => wwv_flow.g_flow_id,
   p_include_in_export_yn => 'Y',
-  p_deinstall_message=> '');
+  p_welcome_message => 'This application installer will guide you through the process of creating your database objects and seed data.',
+  p_license_message    => 'The MIT License (MIT)'||unistr('\000a')||
+''||unistr('\000a')||
+'Copyright (c) 2015 Timothy St. Hilaire'||unistr('\000a')||
+''||unistr('\000a')||
+'Permission is hereby granted, free of charge, to any person obtaining a copy'||unistr('\000a')||
+'of this software and associated documentation files (the "Software"), to deal'||unistr('\000a')||
+'in the Software without restriction, including without limitation the rights'||unistr('\000a')||
+'to use, copy, modify, merge, publish, distribute, sublicense, and/or sell'||unistr('\000a')||
+'copies of the Software, and to permit persons to whom the Software is'||unistr('\000a')||
+'furnished to do so, subject to the following conditions:'||unistr('\000a')||
+''||unistr('\000a')||
+'The above copyright notice and this permission notice shall be included in all'||unistr('\000a')||
+'copies or substantial portions of the Software.'||unistr('\000a')||
+''||unistr('\000a')||
+'THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR'||unistr('\000a')||
+'IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,'||unistr('\000a')||
+'FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE'||unistr('\000a')||
+'AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER'||unistr('\000a')||
+'LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,'||unistr('\000a')||
+'OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE'||unistr('\000a')||
+'SOFTWARE.'||unistr('\000a')||
+'',
+  p_configuration_message => 'You can configure the following attributes of your application.',
+  p_build_options_message => 'You can choose to include the following build options.',
+  p_validation_message => 'The following validations will be performed to ensure your system is compatible with this application.',
+  p_install_message=> 'Please confirm that you would like to install this application''s supporting objects.',
+  p_install_success_message => 'Your application''s supporting objects have been installed.',
+  p_install_failure_message => 'Installation of database objects and seed data has failed.',
+  p_upgrade_message => 'The application installer has detected that this application''s supporting objects were previously installed.  This wizard will guide you through the process of upgrading these supporting objects.',
+  p_upgrade_confirm_message => 'Please confirm that you would like to install this application''s supporting objects.',
+  p_upgrade_success_message => 'Your application''s supporting objects have been installed.',
+  p_upgrade_failure_message => 'Installation of database objects and seed data has failed.',
+  p_deinstall_success_message => 'Deinstallation complete.',
+  p_deinstall_script_clob => s,
+  p_required_free_kb => 100,
+  p_required_sys_privs => 'CREATE PROCEDURE:CREATE TABLE:CREATE TRIGGER:CREATE VIEW',
+  p_required_names_available => 'STU_PREF:STU_PREF_UTIL',
+  p_deinstall_message=> 'This will drop the table created and the package utility as part of the application.  You can continue to use the utility without the user interface if desired.');
 end;
  
  
@@ -15720,6 +16105,1138 @@ end;
 --application/deployment/install
 prompt  ...application install scripts
 --
+ 
+begin
+ 
+declare
+    s varchar2(32767) := null;
+    l_clob clob;
+    l_length number := 1;
+begin
+s:=s||'PROMPT == STU_PREF Table'||unistr('\000a')||
+''||unistr('\000a')||
+'--DROP TABLE STU_PREF;'||unistr('\000a')||
+''||unistr('\000a')||
+'/* '||unistr('\000a')||
+'Table used to add instrumentation to code'||unistr('\000a')||
+'*/'||unistr('\000a')||
+'--           123456789012345678901234567890'||unistr('\000a')||
+'CREATE TABLE STU_PREF '||unistr('\000a')||
+'('||unistr('\000a')||
+'PREF_ID         NUMBER,'||unistr('\000a')||
+'PREF_NAME       VARCHAR2 (255 ),'||unistr('\000a')||
+'VALUE1          VARCHAR2 (2000),'||unistr('\000a')||
+'NUMBER1         NUMBER,'||unistr('\000a')||
+'DATE1           DATE,'||unistr('\000a')||
+'PASSWORD_TEMP   VARCHAR2 (2000),'||unistr('\000a')||
+'PASSWORD_ENC    RAW      (2000),'||unistr('\000a')||
+'DESCRIPTION     VARCHAR2 (2000';
+
+s:=s||'),'||unistr('\000a')||
+'API_EDIT        VARCHAR2 (1   ),'||unistr('\000a')||
+'API_VIEW        VARCHAR2 (1   ),'||unistr('\000a')||
+'CREATED_BY      VARCHAR2 (50  ),'||unistr('\000a')||
+'CREATED_ON      DATE,'||unistr('\000a')||
+'UPDATED_BY      VARCHAR2 (50  ),'||unistr('\000a')||
+'UPDATED_ON      DATE,'||unistr('\000a')||
+'REVISION        NUMBER'||unistr('\000a')||
+');'||unistr('\000a')||
+''||unistr('\000a')||
+'--                  123456789012345678901234567890'||unistr('\000a')||
+'CREATE UNIQUE INDEX PK_STU_PREF ON STU_PREF (PREF_ID);'||unistr('\000a')||
+'CREATE UNIQUE INDEX UK1_STU_PREF ON STU_PREF (PREF_NAME);'||unistr('\000a')||
+''||unistr('\000a')||
+''||unistr('\000a')||
+'-- Table Comments'||unistr('\000a')||
+'COMMENT ON';
+
+s:=s||' TABLE  "STU_PREF" IS  ''Contains main measures list and attributes'';'||unistr('\000a')||
+'COMMENT ON COLUMN "STU_PREF"."PREF_ID"    IS ''Primary Key ID'';'||unistr('\000a')||
+'COMMENT ON COLUMN "STU_PREF"."CREATED_BY" IS ''Standard Who/When'';'||unistr('\000a')||
+'COMMENT ON COLUMN "STU_PREF"."CREATED_ON" IS ''Standard Who/When'';'||unistr('\000a')||
+'COMMENT ON COLUMN "STU_PREF"."UPDATED_BY" IS ''Standard Who/When'';'||unistr('\000a')||
+'COMMENT ON COLUMN "STU_PREF"."UPDATED_ON" IS ''Standard Who/When'';'||unistr('\000a')||
+'COMM';
+
+s:=s||'ENT ON COLUMN "STU_PREF"."REVISION"   IS ''Standard Used to determine if a message was updated.'';'||unistr('\000a')||
+''||unistr('\000a')||
+'PROMPT == STU_PREF_UTIL Package Spec'||unistr('\000a')||
+''||unistr('\000a')||
+'create or replace'||unistr('\000a')||
+'PACKAGE STU_PREF_UTIL IS'||unistr('\000a')||
+''||unistr('\000a')||
+'-----------------------------------------------------------------------'||unistr('\000a')||
+'--'||unistr('\000a')||
+'--               Copyright(C) 2015 Tim St. Hilaire '||unistr('\000a')||
+'--                         All Rights Reserved'||unistr('\000a')||
+'-- '||unistr('\000a')||
+'------------------------------------------';
+
+s:=s||'-----------------------------'||unistr('\000a')||
+'--  Application   : STU_PREF'||unistr('\000a')||
+'--  Subsystem     : Preferences'||unistr('\000a')||
+'--  Package Name  : STU_PREF_UTIL'||unistr('\000a')||
+'--  Purpose       : Utility for managing settings for an application.'||unistr('\000a')||
+'--'||unistr('\000a')||
+'--  Comments:       '||unistr('\000a')||
+'-----------------------------------------------------------------------'||unistr('\000a')||
+'--'||unistr('\000a')||
+'-- 1.3    20-NOV-2015   Updated to STU_PREF for GitHub'||unistr('\000a')||
+'-- 1.2    04-OCT-2014   Next revision with improved';
+
+s:=s||' update capabilities'||unistr('\000a')||
+'-- 1.1    01-SEP-2014   Simplified table (hard to beleive)'||unistr('\000a')||
+'-----------------------------------------------------------------------'||unistr('\000a')||
+''||unistr('\000a')||
+'--====================================================================='||unistr('\000a')||
+'--< PUBLIC TYPES AND GLOBALS >-----------------------------------------'||unistr('\000a')||
+'--====================================================================='||unistr('\000a')||
+''||unistr('\000a')||
+'SUBTYPE gt_pref_record IS STU_';
+
+s:=s||'PREF%ROWTYPE;'||unistr('\000a')||
+''||unistr('\000a')||
+'--====================================================================='||unistr('\000a')||
+'--< PUBLIC METHODS >==================================================='||unistr('\000a')||
+'--====================================================================='||unistr('\000a')||
+''||unistr('\000a')||
+''||unistr('\000a')||
+'-----------------------------------------------------------------------'||unistr('\000a')||
+'--< ENCRYPT >----------------------------------------------------------'||unistr('\000a')||
+'-----------------------';
+
+s:=s||'------------------------------------------------'||unistr('\000a')||
+'--  Purpose: '||unistr('\000a')||
+'--  Allows the information in the settings table to be encrypted via trigger'||unistr('\000a')||
+'--'||unistr('\000a')||
+'--  p_value: The thing to be encrypted '||unistr('\000a')||
+'--  p_key:   Key to use to encrypt the value'||unistr('\000a')||
+'--'||unistr('\000a')||
+'--  Comments:  '||unistr('\000a')||
+'--'||unistr('\000a')||
+'------------------------------------------------------------------------'||unistr('\000a')||
+'FUNCTION encrypt( p_value  VARCHAR2,  '||unistr('\000a')||
+'                  p_key    VARCHAR2 ) ';
+
+s:=s||'RETURN RAW;'||unistr('\000a')||
+''||unistr('\000a')||
+'-------------------------------------------------------------------'||unistr('\000a')||
+'--< SET_PREF >-----------------------------------------------------'||unistr('\000a')||
+'-------------------------------------------------------------------'||unistr('\000a')||
+'--  Purpose : Quick Set the value for the setting table'||unistr('\000a')||
+'-------------------------------------------------------------------'||unistr('\000a')||
+'PROCEDURE SET_PREF       ( p_name STU_PREF.PREF_NAME%TYPE, ';
+
+s:=s||''||unistr('\000a')||
+'                           p_value STU_PREF.VALUE1%TYPE);'||unistr('\000a')||
+''||unistr('\000a')||
+'-------------------------------------------------------------------'||unistr('\000a')||
+'--< SET_PREF >-----------------------------------------------------'||unistr('\000a')||
+'-------------------------------------------------------------------'||unistr('\000a')||
+'--  Purpose : Quick Set the value for the setting table'||unistr('\000a')||
+'-------------------------------------------------------------------'||unistr('\000a')||
+'PROCEDURE SE';
+
+s:=s||'T_PREF       ( p_name STU_PREF.PREF_NAME%TYPE, '||unistr('\000a')||
+'                           p_value STU_PREF.NUMBER1%TYPE);'||unistr('\000a')||
+''||unistr('\000a')||
+'-------------------------------------------------------------------'||unistr('\000a')||
+'--< SET_PREF >-----------------------------------------------------'||unistr('\000a')||
+'-------------------------------------------------------------------'||unistr('\000a')||
+'--  Purpose : Quick Set the value for the setting table'||unistr('\000a')||
+'--------------------------------';
+
+s:=s||'-----------------------------------'||unistr('\000a')||
+'PROCEDURE SET_PREF       ( p_name STU_PREF.PREF_NAME%TYPE, '||unistr('\000a')||
+'                           p_value STU_PREF.DATE1%TYPE);'||unistr('\000a')||
+''||unistr('\000a')||
+'-------------------------------------------------------------------'||unistr('\000a')||
+'--< GET_PREF_VALUE >-----------------------------------------------'||unistr('\000a')||
+'-------------------------------------------------------------------'||unistr('\000a')||
+'--  Purpose : Get the settings value form ';
+
+s:=s||'the setting table'||unistr('\000a')||
+'--'||unistr('\000a')||
+'--  Comments:'||unistr('\000a')||
+'--'||unistr('\000a')||
+'-------------------------------------------------------------------'||unistr('\000a')||
+'FUNCTION GET_PREF_VALUE ( p_name  VARCHAR2) RETURN STU_PREF.value1%TYPE;'||unistr('\000a')||
+''||unistr('\000a')||
+''||unistr('\000a')||
+'-------------------------------------------------------------------'||unistr('\000a')||
+'--< GET_PREF_NUMBER >----------------------------------------------'||unistr('\000a')||
+'-------------------------------------------------------------------'||unistr('\000a')||
+'--  Purpose : G';
+
+s:=s||'et the settings value form the setting table'||unistr('\000a')||
+'--'||unistr('\000a')||
+'--  Comments:'||unistr('\000a')||
+'--'||unistr('\000a')||
+'-------------------------------------------------------------------'||unistr('\000a')||
+'FUNCTION GET_PREF_NUMBER ( p_name  VARCHAR2) RETURN STU_PREF.NUMBER1%TYPE;'||unistr('\000a')||
+''||unistr('\000a')||
+'-------------------------------------------------------------------'||unistr('\000a')||
+'--< GET_PREF_DATE >------------------------------------------------'||unistr('\000a')||
+'-------------------------------------------------------';
+
+s:=s||'------------'||unistr('\000a')||
+'--  Purpose : Get the settings value form the setting table'||unistr('\000a')||
+'--'||unistr('\000a')||
+'--  Comments:'||unistr('\000a')||
+'--'||unistr('\000a')||
+'-------------------------------------------------------------------'||unistr('\000a')||
+'FUNCTION GET_PREF_DATE ( p_name  VARCHAR2) RETURN STU_PREF.DATE1%TYPE;'||unistr('\000a')||
+''||unistr('\000a')||
+''||unistr('\000a')||
+'-------------------------------------------------------------------'||unistr('\000a')||
+'--< GET_PREF_PW >--------------------------------------------------'||unistr('\000a')||
+'------------------------------';
+
+s:=s||'-------------------------------------'||unistr('\000a')||
+'--  Purpose : Get the settings value form the setting table'||unistr('\000a')||
+'--'||unistr('\000a')||
+'--  Comments:'||unistr('\000a')||
+'--'||unistr('\000a')||
+'-------------------------------------------------------------------'||unistr('\000a')||
+'FUNCTION GET_PREF_PW ( p_name  VARCHAR2) RETURN STU_PREF.PASSWORD_TEMP%TYPE;'||unistr('\000a')||
+''||unistr('\000a')||
+''||unistr('\000a')||
+'---------------------------------------------------------------------'||unistr('\000a')||
+'--< GET_RECORD >-------------------------------------------------';
+
+s:=s||'----'||unistr('\000a')||
+'---------------------------------------------------------------------'||unistr('\000a')||
+'--  Purpose : Returns a full record'||unistr('\000a')||
+'--  '||unistr('\000a')||
+'--  Comments:  Intended for TABLE report type use'||unistr('\000a')||
+'--'||unistr('\000a')||
+'---------------------------------------------------------------------'||unistr('\000a')||
+'FUNCTION GET_RECORD (p_id   IN NUMBER) RETURN gt_pref_record;'||unistr('\000a')||
+''||unistr('\000a')||
+'---------------------------------------------------------------------'||unistr('\000a')||
+'--< GET_RECORD >------------';
+
+s:=s||'-----------------------------------------'||unistr('\000a')||
+'---------------------------------------------------------------------'||unistr('\000a')||
+'--  Purpose : Returns a full record'||unistr('\000a')||
+'--  '||unistr('\000a')||
+'--  Comments:  Overloaded Preference fetch by NAME'||unistr('\000a')||
+'--'||unistr('\000a')||
+'---------------------------------------------------------------------'||unistr('\000a')||
+'FUNCTION GET_RECORD (p_name   IN STU_PREF.PREF_NAME%TYPE) RETURN gt_pref_record;'||unistr('\000a')||
+''||unistr('\000a')||
+'-----------------------------------------';
+
+s:=s||'----------------------------'||unistr('\000a')||
+'--< INSERT_UPDATE_RECORD >-------------------------------------------'||unistr('\000a')||
+'---------------------------------------------------------------------'||unistr('\000a')||
+'--  Purpose : INSERT_UPDATE_RECORD designed to evaluate INSERT vs UPDATE'||unistr('\000a')||
+'--'||unistr('\000a')||
+'--             ID included = UPDATE'||unistr('\000a')||
+'--             Otherwise a new record will be created.'||unistr('\000a')||
+'--  Comments:'||unistr('\000a')||
+'--'||unistr('\000a')||
+'-----------------------------------------------';
+
+s:=s||'----------------------'||unistr('\000a')||
+'PROCEDURE INSERT_UPDATE_RECORD (p_record    IN OUT gt_pref_record,'||unistr('\000a')||
+'                                p_id           OUT NUMBER);'||unistr('\000a')||
+''||unistr('\000a')||
+'---------------------------------------------------------------------'||unistr('\000a')||
+'--< INSERT_UPDATE_RECORD >-------------------------------------------'||unistr('\000a')||
+'---------------------------------------------------------------------'||unistr('\000a')||
+'--  Purpose : Same as above - without t';
+
+s:=s||'he RETURN values'||unistr('\000a')||
+'--  Comments:'||unistr('\000a')||
+'---------------------------------------------------------------------'||unistr('\000a')||
+'PROCEDURE INSERT_UPDATE_RECORD (p_record    IN gt_pref_record);       '||unistr('\000a')||
+''||unistr('\000a')||
+'---------------------------------------------------------------------'||unistr('\000a')||
+'--< DELETE_RECORD >--------------------------------------------------'||unistr('\000a')||
+'---------------------------------------------------------------------'||unistr('\000a')||
+'--  Purpose : Ret';
+
+s:=s||'urns a full record'||unistr('\000a')||
+'--  '||unistr('\000a')||
+'--  Comments:  Note - record activities are done by PREF_ID, not name'||unistr('\000a')||
+'--'||unistr('\000a')||
+'---------------------------------------------------------------------'||unistr('\000a')||
+'PROCEDURE DELETE_RECORD (p_id   IN NUMBER);'||unistr('\000a')||
+''||unistr('\000a')||
+''||unistr('\000a')||
+'END STU_PREF_UTIL;'||unistr('\000a')||
+''||unistr('\000a')||
+'/'||unistr('\000a')||
+''||unistr('\000a')||
+'PROMPT == STU_PREF Trigger'||unistr('\000a')||
+''||unistr('\000a')||
+'--                        123456789012345678901234567890'||unistr('\000a')||
+'CREATE OR REPLACE TRIGGER BIU_STU_PREF'||unistr('\000a')||
+'BEFORE INSERT OR UPDATE ON  STU_PREF'||unistr('\000a')||
+'REF';
+
+s:=s||'ERENCING NEW AS NEW OLD AS OLD'||unistr('\000a')||
+'FOR EACH ROW'||unistr('\000a')||
+'BEGIN'||unistr('\000a')||
+'  IF INSERTING THEN '||unistr('\000a')||
+'    IF :NEW.PREF_ID IS NULL THEN'||unistr('\000a')||
+'      SELECT to_number(sys_guid(),''XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX'')'||unistr('\000a')||
+'        INTO :NEW.PREF_ID FROM DUAL;'||unistr('\000a')||
+'    END IF;'||unistr('\000a')||
+'    :NEW.CREATED_ON := SYSDATE;'||unistr('\000a')||
+'    :NEW.CREATED_BY := nvl(wwv_flow.g_user,nvl(:NEW.CREATED_BY,USER));'||unistr('\000a')||
+'    IF :NEW.PASSWORD_TEMP IS NOT NULL THEN'||unistr('\000a')||
+'      :NEW.PASSWORD_ENC := STU_';
+
+s:=s||'PREF_UTIL.encrypt(P_VALUE => :NEW.PASSWORD_TEMP,'||unistr('\000a')||
+'                                                 P_KEY   => :NEW.PREF_ID);'||unistr('\000a')||
+'      :NEW.PASSWORD_TEMP:=NULL;'||unistr('\000a')||
+'    END IF;'||unistr('\000a')||
+'  END IF;'||unistr('\000a')||
+''||unistr('\000a')||
+'  IF UPDATING THEN'||unistr('\000a')||
+'    :NEW.UPDATED_ON := SYSDATE;'||unistr('\000a')||
+'    :NEW.UPDATED_BY := nvl(wwv_flow.g_user,nvl(:NEW.UPDATED_BY,USER));'||unistr('\000a')||
+'    IF :NEW.PASSWORD_TEMP IS NOT NULL THEN'||unistr('\000a')||
+'      :NEW.PASSWORD_ENC := STU_PREF_UTIL.encrypt(P_VALUE';
+
+s:=s||' => :NEW.PASSWORD_TEMP,'||unistr('\000a')||
+'                                                 P_KEY   => :NEW.PREF_ID);'||unistr('\000a')||
+'      :NEW.PASSWORD_TEMP:=NULL;'||unistr('\000a')||
+'    END IF;'||unistr('\000a')||
+'  END IF;'||unistr('\000a')||
+' '||unistr('\000a')||
+'  -- Increment the revision field'||unistr('\000a')||
+'  :NEW.REVISION:=nvl(:OLD.REVISION,0)+1;'||unistr('\000a')||
+' '||unistr('\000a')||
+''||unistr('\000a')||
+'END;'||unistr('\000a')||
+'/'||unistr('\000a')||
+''||unistr('\000a')||
+'PROMPT == STU_PREF_UTIL Package Body'||unistr('\000a')||
+''||unistr('\000a')||
+'create or replace'||unistr('\000a')||
+'PACKAGE BODY STU_PREF_UTIL AS'||unistr('\000a')||
+''||unistr('\000a')||
+'---------------------------------------------------------------------'||unistr('\000a')||
+'--';
+
+s:=s||''||unistr('\000a')||
+'--               Copyright(C) 2015 Tim St. Hilaire'||unistr('\000a')||
+'--                         All Rights Reserved'||unistr('\000a')||
+'-- '||unistr('\000a')||
+'---------------------------------------------------------------------'||unistr('\000a')||
+'--  Application   : STU_PREF'||unistr('\000a')||
+'--  Subsystem     : Preferences'||unistr('\000a')||
+'--  Package Name  : STU_PREF_UTIL'||unistr('\000a')||
+'--  Purpose       : Utility for managing settings for an application.'||unistr('\000a')||
+'--'||unistr('\000a')||
+'--  Comments:       '||unistr('\000a')||
+'--------------------------------------';
+
+s:=s||'---------------------------------'||unistr('\000a')||
+'--'||unistr('\000a')||
+'-- 1.3    20-NOV-2015   Updated to STU_PREF for GitHub'||unistr('\000a')||
+'-- 1.2    04-OCT-2014   Next revision with improved update capabilities'||unistr('\000a')||
+'-- 1.1    01-SEP-2014   Simplified table (hard to beleive)'||unistr('\000a')||
+'-----------------------------------------------------------------------'||unistr('\000a')||
+''||unistr('\000a')||
+'--====================================================================='||unistr('\000a')||
+'--< PRIVATE TYPES AND GLOBALS >-';
+
+s:=s||'-------------------------------------'||unistr('\000a')||
+'--====================================================================='||unistr('\000a')||
+''||unistr('\000a')||
+''||unistr('\000a')||
+'--====================================================================='||unistr('\000a')||
+'--< PRIVATE METHODS >=================================================='||unistr('\000a')||
+'--====================================================================='||unistr('\000a')||
+''||unistr('\000a')||
+'-----------------------------------------------------------------------';
+
+s:=s||'--------'||unistr('\000a')||
+'--< LOG >----------------------------------------------------------------------'||unistr('\000a')||
+'-------------------------------------------------------------------------------'||unistr('\000a')||
+'--  Purpose : Put the if logic here to simplify code'||unistr('\000a')||
+'--'||unistr('\000a')||
+'--  Comments:'||unistr('\000a')||
+'--'||unistr('\000a')||
+'-------------------------------------------------------------------------------'||unistr('\000a')||
+'PROCEDURE LOG ('||unistr('\000a')||
+'  p_message VARCHAR2, '||unistr('\000a')||
+'  p_level NUMBER DEFAULT 1, '||unistr('\000a')||
+'  p_marker';
+
+s:=s||' VARCHAR2 DEFAULT NULL'||unistr('\000a')||
+')'||unistr('\000a')||
+'IS'||unistr('\000a')||
+'  -- PRAGMA AUTONOMOUS_TRANSACTION; -- only use for custom table logging when needed'||unistr('\000a')||
+'  lv_message VARCHAR2(32767);'||unistr('\000a')||
+'BEGIN'||unistr('\000a')||
+'    -- alter the message'||unistr('\000a')||
+'    lv_message:= substr($$PLSQL_UNIT||'':''|| p_marker||'':''||p_message,1,2000);'||unistr('\000a')||
+''||unistr('\000a')||
+'    -- logger.log(lv_message);'||unistr('\000a')||
+'    -- STU_SIMPLE_LOG_UTIL.WRITE(lv_message,p_level);'||unistr('\000a')||
+'    '||unistr('\000a')||
+'    -- to show in APEX logs'||unistr('\000a')||
+'    apex_application.debug(lv';
+
+s:=s||'_message);'||unistr('\000a')||
+''||unistr('\000a')||
+'END LOG;'||unistr('\000a')||
+''||unistr('\000a')||
+''||unistr('\000a')||
+''||unistr('\000a')||
+'--====================================================================='||unistr('\000a')||
+'--< PUBLIC METHODS >==================================================='||unistr('\000a')||
+'--====================================================================='||unistr('\000a')||
+''||unistr('\000a')||
+'-------------------------------------------------------------------'||unistr('\000a')||
+'--< SET_PREF >-----------------------------------------------'||unistr('\000a')||
+'-----------------------------';
+
+s:=s||'--------------------------------------'||unistr('\000a')||
+'--  Purpose : Get the settings value form the setting table'||unistr('\000a')||
+'--'||unistr('\000a')||
+'--  Comments:'||unistr('\000a')||
+'--'||unistr('\000a')||
+'-------------------------------------------------------------------'||unistr('\000a')||
+'PROCEDURE SET_PREF ( p_name STU_PREF.PREF_NAME%TYPE, '||unistr('\000a')||
+'                     p_value STU_PREF.value1%TYPE)'||unistr('\000a')||
+'IS'||unistr('\000a')||
+'  lt_record gt_pref_record;'||unistr('\000a')||
+'BEGIN'||unistr('\000a')||
+''||unistr('\000a')||
+'  lt_record := GET_RECORD (p_name => p_name);'||unistr('\000a')||
+'  '||unistr('\000a')||
+'  IF lt_record.PREF_N';
+
+s:=s||'AME IS NULL '||unistr('\000a')||
+'  THEN'||unistr('\000a')||
+'    IF STU_PREF_UTIL.GET_PREF_VALUE(p_name=>''STU_PREF-CreateOnSet'')=''Y'''||unistr('\000a')||
+'    THEN'||unistr('\000a')||
+'      -- new record name to set'||unistr('\000a')||
+'      lt_record.PREF_NAME := p_name;'||unistr('\000a')||
+'    ELSE'||unistr('\000a')||
+'      RETURN;'||unistr('\000a')||
+'    END IF;'||unistr('\000a')||
+'  END IF;'||unistr('\000a')||
+''||unistr('\000a')||
+'  -- set new value'||unistr('\000a')||
+'  lt_record.value1:=p_value;'||unistr('\000a')||
+''||unistr('\000a')||
+'  -- use the update routine to set values'||unistr('\000a')||
+'  INSERT_UPDATE_RECORD(p_record => lt_record);'||unistr('\000a')||
+''||unistr('\000a')||
+'END SET_PREF;'||unistr('\000a')||
+''||unistr('\000a')||
+'------------------------------';
+
+s:=s||'-------------------------------------'||unistr('\000a')||
+'--< SET_PREF >-----------------------------------------------'||unistr('\000a')||
+'-------------------------------------------------------------------'||unistr('\000a')||
+'--  Purpose : Get the settings value form the setting table'||unistr('\000a')||
+'--'||unistr('\000a')||
+'--  Comments:'||unistr('\000a')||
+'--'||unistr('\000a')||
+'-------------------------------------------------------------------'||unistr('\000a')||
+'PROCEDURE SET_PREF ( p_name STU_PREF.PREF_NAME%TYPE, '||unistr('\000a')||
+'                     p_value S';
+
+s:=s||'TU_PREF.NUMBER1%TYPE)'||unistr('\000a')||
+'IS'||unistr('\000a')||
+'  lt_record gt_pref_record;'||unistr('\000a')||
+'BEGIN'||unistr('\000a')||
+''||unistr('\000a')||
+'  lt_record := GET_RECORD (p_name => p_name);'||unistr('\000a')||
+'  '||unistr('\000a')||
+'  IF lt_record.PREF_NAME IS NULL '||unistr('\000a')||
+'  THEN'||unistr('\000a')||
+'    IF STU_PREF_UTIL.GET_PREF_VALUE(p_name=>''STU_PREF-CreateOnSet'')=''Y'''||unistr('\000a')||
+'    THEN'||unistr('\000a')||
+'      -- new record name to set'||unistr('\000a')||
+'      lt_record.PREF_NAME := p_name;'||unistr('\000a')||
+'    ELSE'||unistr('\000a')||
+'      RETURN;'||unistr('\000a')||
+'    END IF;'||unistr('\000a')||
+'  END IF;'||unistr('\000a')||
+''||unistr('\000a')||
+'  -- set new value'||unistr('\000a')||
+'  lt_record.number1:=p_value;'||unistr('\000a')||
+''||unistr('\000a')||
+'  --';
+
+s:=s||' use the update routine to set values'||unistr('\000a')||
+'  INSERT_UPDATE_RECORD(p_record => lt_record);'||unistr('\000a')||
+''||unistr('\000a')||
+'END SET_PREF;'||unistr('\000a')||
+''||unistr('\000a')||
+'-------------------------------------------------------------------'||unistr('\000a')||
+'--< SET_PREF >-----------------------------------------------'||unistr('\000a')||
+'-------------------------------------------------------------------'||unistr('\000a')||
+'--  Purpose : Get the settings value form the setting table'||unistr('\000a')||
+'--'||unistr('\000a')||
+'--  Comments:'||unistr('\000a')||
+'--'||unistr('\000a')||
+'---------------------';
+
+s:=s||'----------------------------------------------'||unistr('\000a')||
+'PROCEDURE SET_PREF ( p_name STU_PREF.PREF_NAME%TYPE, '||unistr('\000a')||
+'                     p_value STU_PREF.DATE1%TYPE)'||unistr('\000a')||
+'IS'||unistr('\000a')||
+'  lt_record gt_pref_record;'||unistr('\000a')||
+'BEGIN'||unistr('\000a')||
+''||unistr('\000a')||
+'  lt_record := GET_RECORD (p_name => p_name);'||unistr('\000a')||
+'  '||unistr('\000a')||
+'  IF lt_record.PREF_NAME IS NULL '||unistr('\000a')||
+'  THEN'||unistr('\000a')||
+'    IF STU_PREF_UTIL.GET_PREF_VALUE(p_name=>''STU_PREF-CreateOnSet'')=''Y'''||unistr('\000a')||
+'    THEN'||unistr('\000a')||
+'      -- new record name to set'||unistr('\000a')||
+'      lt';
+
+s:=s||'_record.PREF_NAME := p_name;'||unistr('\000a')||
+'    ELSE'||unistr('\000a')||
+'      RETURN;'||unistr('\000a')||
+'    END IF;'||unistr('\000a')||
+'  END IF;'||unistr('\000a')||
+''||unistr('\000a')||
+'  -- set new value'||unistr('\000a')||
+'  lt_record.date1:=p_value;'||unistr('\000a')||
+''||unistr('\000a')||
+'  -- use the update routine to set values'||unistr('\000a')||
+'  INSERT_UPDATE_RECORD(p_record => lt_record);'||unistr('\000a')||
+''||unistr('\000a')||
+'END SET_PREF;'||unistr('\000a')||
+''||unistr('\000a')||
+'-------------------------------------------------------------------'||unistr('\000a')||
+'--< GET_PREF_VALUE >-----------------------------------------------'||unistr('\000a')||
+'------------------------------------';
+
+s:=s||'-------------------------------'||unistr('\000a')||
+'--  Purpose : Get the settings value form the setting table'||unistr('\000a')||
+'--'||unistr('\000a')||
+'--  Comments:'||unistr('\000a')||
+'--  A version of this used to contain more than one value.  '||unistr('\000a')||
+'--  This feature has been removed'||unistr('\000a')||
+'-------------------------------------------------------------------'||unistr('\000a')||
+'FUNCTION GET_PREF_VALUE ( p_name  VARCHAR2) RETURN STU_PREF.value1%TYPE'||unistr('\000a')||
+'IS'||unistr('\000a')||
+'  l_value1 STU_PREF.value1%TYPE;'||unistr('\000a')||
+'  -- l_value2 VARCHA';
+
+s:=s||'R2(2000);'||unistr('\000a')||
+'  -- l_value3 VARCHAR2(2000);'||unistr('\000a')||
+'BEGIN'||unistr('\000a')||
+'  '||unistr('\000a')||
+'  SELECT value1'||unistr('\000a')||
+'    INTO l_value1'||unistr('\000a')||
+'    FROM STU_PREF '||unistr('\000a')||
+'   WHERE PREF_NAME = p_name'||unistr('\000a')||
+'     AND API_VIEW = ''Y'';'||unistr('\000a')||
+''||unistr('\000a')||
+'  -- Option:if preference will contain more than one of each... '||unistr('\000a')||
+'  -- CASE p_value'||unistr('\000a')||
+'  -- WHEN 1 THEN'||unistr('\000a')||
+'  --   RETURN l_value1;'||unistr('\000a')||
+'  -- WHEN 2 THEN'||unistr('\000a')||
+'  --   RETURN l_value2;'||unistr('\000a')||
+'  -- WHEN 3 THEN'||unistr('\000a')||
+'  --   RETURN l_value3;'||unistr('\000a')||
+'  -- ELSE'||unistr('\000a')||
+'  --   RETURN NULL;'||unistr('\000a')||
+'  -- END';
+
+s:=s||' CASE;'||unistr('\000a')||
+''||unistr('\000a')||
+'  RETURN l_value1;'||unistr('\000a')||
+''||unistr('\000a')||
+'EXCEPTION WHEN NO_DATA_FOUND THEN'||unistr('\000a')||
+'  -- request for an unknown value - return NULL'||unistr('\000a')||
+'  RETURN NULL;'||unistr('\000a')||
+'END GET_PREF_VALUE;'||unistr('\000a')||
+'  '||unistr('\000a')||
+'-------------------------------------------------------------------'||unistr('\000a')||
+'--< GET_PREF_NUMBER >-----------------------------------------------'||unistr('\000a')||
+'-------------------------------------------------------------------'||unistr('\000a')||
+'--  Purpose : Get the settings value form the s';
+
+s:=s||'etting table'||unistr('\000a')||
+'--'||unistr('\000a')||
+'--  Comments:'||unistr('\000a')||
+'--  A version of this used to contain more than one value.  '||unistr('\000a')||
+'--  This feature has been removed'||unistr('\000a')||
+'-------------------------------------------------------------------'||unistr('\000a')||
+'FUNCTION GET_PREF_NUMBER ( p_name  VARCHAR2) RETURN STU_PREF.number1%TYPE'||unistr('\000a')||
+'IS'||unistr('\000a')||
+'  l_number1 STU_PREF.number1%TYPE;'||unistr('\000a')||
+'  -- l_value2 VARCHAR2(2000);'||unistr('\000a')||
+'  -- l_value3 VARCHAR2(2000);'||unistr('\000a')||
+'BEGIN'||unistr('\000a')||
+'  '||unistr('\000a')||
+'  SELECT number1'||unistr('\000a')||
+'    INTO ';
+
+s:=s||'l_number1'||unistr('\000a')||
+'    FROM STU_PREF '||unistr('\000a')||
+'   WHERE PREF_NAME = p_name'||unistr('\000a')||
+'     AND API_VIEW = ''Y'';'||unistr('\000a')||
+''||unistr('\000a')||
+'  RETURN l_number1;'||unistr('\000a')||
+''||unistr('\000a')||
+'EXCEPTION WHEN NO_DATA_FOUND THEN'||unistr('\000a')||
+'  -- request for an unknown value - return NULL'||unistr('\000a')||
+'  RETURN NULL;'||unistr('\000a')||
+'END GET_PREF_NUMBER;'||unistr('\000a')||
+''||unistr('\000a')||
+''||unistr('\000a')||
+'-------------------------------------------------------------------'||unistr('\000a')||
+'--< GET_PREF_DATE >-----------------------------------------------'||unistr('\000a')||
+'-----------------------------------------';
+
+s:=s||'--------------------------'||unistr('\000a')||
+'--  Purpose : Get the settings value form the setting table'||unistr('\000a')||
+'--'||unistr('\000a')||
+'--  Comments:'||unistr('\000a')||
+'--  A version of this used to contain more than one value.  '||unistr('\000a')||
+'--  This feature has been removed'||unistr('\000a')||
+'-------------------------------------------------------------------'||unistr('\000a')||
+'FUNCTION GET_PREF_DATE ( p_name  VARCHAR2) RETURN STU_PREF.date1%TYPE'||unistr('\000a')||
+'IS'||unistr('\000a')||
+'  l_date1 STU_PREF.date1%TYPE;'||unistr('\000a')||
+'  -- l_value2 VARCHAR2(2000);';
+
+s:=s||''||unistr('\000a')||
+'  -- l_value3 VARCHAR2(2000);'||unistr('\000a')||
+'BEGIN'||unistr('\000a')||
+'  '||unistr('\000a')||
+'  SELECT date1'||unistr('\000a')||
+'    INTO l_date1'||unistr('\000a')||
+'    FROM STU_PREF '||unistr('\000a')||
+'   WHERE PREF_NAME = p_name'||unistr('\000a')||
+'     AND API_VIEW = ''Y'';'||unistr('\000a')||
+''||unistr('\000a')||
+'  RETURN l_date1;'||unistr('\000a')||
+''||unistr('\000a')||
+'EXCEPTION WHEN NO_DATA_FOUND THEN'||unistr('\000a')||
+'  -- request for an unknown value - return NULL'||unistr('\000a')||
+'  RETURN NULL;'||unistr('\000a')||
+'END GET_PREF_DATE;'||unistr('\000a')||
+''||unistr('\000a')||
+'---------------------------------------------------------------------'||unistr('\000a')||
+'--< DECRYPT >------------------------------------';
+
+s:=s||'--------------------'||unistr('\000a')||
+'---------------------------------------------------------------------'||unistr('\000a')||
+'--  Purpose : See Specification '||unistr('\000a')||
+'--    '||unistr('\000a')||
+'--  Comments:'||unistr('\000a')||
+'--'||unistr('\000a')||
+'---------------------------------------------------------------------'||unistr('\000a')||
+'FUNCTION decrypt( p_crypt  RAW,  '||unistr('\000a')||
+'                  p_key    VARCHAR2 ) RETURN VARCHAR2 AS'||unistr('\000a')||
+'/*'||unistr('\000a')||
+'http://docs.oracle.com/cd/B19306_01/appdev.102/b14258/d_obtool.htm'||unistr('\000a')||
+'http://asktom.oracle.';
+
+s:=s||'com/pls/asktom/f?p=100:11:0::::P11_QUESTION_ID:685421699413'||unistr('\000a')||
+'*/'||unistr('\000a')||
+'  l_key          RAW(32767);'||unistr('\000a')||
+'  l_value_raw    RAW(2000);'||unistr('\000a')||
+'  l_value        VARCHAR2(32767);'||unistr('\000a')||
+'BEGIN'||unistr('\000a')||
+'  '||unistr('\000a')||
+'  -- Do not run if the needed values are not passed in.'||unistr('\000a')||
+'  IF p_crypt is null or p_key is null then'||unistr('\000a')||
+'    return NULL;'||unistr('\000a')||
+'  END IF;'||unistr('\000a')||
+'  '||unistr('\000a')||
+'  -- using a 128 bit key of 16 bytes'||unistr('\000a')||
+'  --l_key := UTL_RAW.cast_to_raw(substr(p_key,length(p_key)-16,length(p';
+
+s:=s||'_key)));'||unistr('\000a')||
+'  l_key := UTL_RAW.cast_to_raw(substr(p_key,length(p_key)-16,16));'||unistr('\000a')||
+''||unistr('\000a')||
+'  l_value_raw:=dbms_obfuscation_toolkit.DESDecrypt( '||unistr('\000a')||
+'             input     => p_crypt,'||unistr('\000a')||
+'             key       => l_key );'||unistr('\000a')||
+''||unistr('\000a')||
+'  l_value:= utl_raw.cast_to_varchar2(l_value_raw);'||unistr('\000a')||
+''||unistr('\000a')||
+'  RETURN rtrim(l_value,chr(0));'||unistr('\000a')||
+'EXCEPTION'||unistr('\000a')||
+'  WHEN others THEN'||unistr('\000a')||
+'    log(''Error when decrypting value:''|| p_key,3,''DECRYPT'');'||unistr('\000a')||
+'    RETURN NULL;'||unistr('\000a')||
+'END DECR';
+
+s:=s||'YPT;'||unistr('\000a')||
+''||unistr('\000a')||
+''||unistr('\000a')||
+'---------------------------------------------------------------------'||unistr('\000a')||
+'--< ENCRYPT >--------------------------------------------------------'||unistr('\000a')||
+'---------------------------------------------------------------------'||unistr('\000a')||
+'--  Purpose : See Specification '||unistr('\000a')||
+'--    '||unistr('\000a')||
+'--  Comments:'||unistr('\000a')||
+'--'||unistr('\000a')||
+'---------------------------------------------------------------------'||unistr('\000a')||
+'FUNCTION encrypt( p_value  VARCHAR2,  '||unistr('\000a')||
+'                 ';
+
+s:=s||' p_key    VARCHAR2 ) RETURN RAW AS'||unistr('\000a')||
+'/*'||unistr('\000a')||
+'http://docs.oracle.com/cd/B19306_01/appdev.102/b14258/d_obtool.htm'||unistr('\000a')||
+'*/'||unistr('\000a')||
+'  li_pad_count    integer;'||unistr('\000a')||
+'  lr_key          RAW(32767);'||unistr('\000a')||
+'  lr_padblock     RAW(2000);'||unistr('\000a')||
+'  lr_crypt        RAW(2000);'||unistr('\000a')||
+'BEGIN'||unistr('\000a')||
+'  '||unistr('\000a')||
+'  -- Do not run if the needed values are not passed in.'||unistr('\000a')||
+'  IF p_value is null or p_key is null then'||unistr('\000a')||
+'    return NULL;'||unistr('\000a')||
+'  END IF;'||unistr('\000a')||
+'  '||unistr('\000a')||
+'  -- determine the padd block as a valu';
+
+s:=s||'e divisible by 8 is required'||unistr('\000a')||
+'  li_pad_count := 8-mod(length(p_value),8);'||unistr('\000a')||
+''||unistr('\000a')||
+'  -- needs to be a block of 8 - pad with spaces so it can be trimmed during decrypt'||unistr('\000a')||
+'  lr_padblock := UTL_RAW.cast_to_raw(p_value||rpad(chr(0),li_pad_count,chr(0)));'||unistr('\000a')||
+''||unistr('\000a')||
+'  '||unistr('\000a')||
+'  -- using a 128 bit key of 16 bytes'||unistr('\000a')||
+'  lr_key := UTL_RAW.cast_to_raw(substr(p_key,length(p_key)-16,length(p_key)));'||unistr('\000a')||
+'  --lr_key := hextoraw(''AAAABBBBCCCCDDDD''';
+
+s:=s||');'||unistr('\000a')||
+''||unistr('\000a')||
+'  lr_crypt:=dbms_obfuscation_toolkit.DESEncrypt('||unistr('\000a')||
+'               input        => lr_padblock,'||unistr('\000a')||
+'               key          => lr_key );'||unistr('\000a')||
+''||unistr('\000a')||
+'  RETURN lr_crypt;'||unistr('\000a')||
+'  '||unistr('\000a')||
+'END encrypt;'||unistr('\000a')||
+''||unistr('\000a')||
+'  -------------------------------------------------------------------'||unistr('\000a')||
+'  --< GET_PREF_PW >-----------------------------------------------'||unistr('\000a')||
+'  -------------------------------------------------------------------'||unistr('\000a')||
+'  --  Purpose : Ge';
+
+s:=s||'t the settings value form the setting table'||unistr('\000a')||
+'  --            In the case of password - it needs to be decrypted'||unistr('\000a')||
+'  --  Comments:'||unistr('\000a')||
+'  --'||unistr('\000a')||
+'  -------------------------------------------------------------------'||unistr('\000a')||
+'  FUNCTION GET_PREF_PW ( p_name VARCHAR2) RETURN STU_PREF.PASSWORD_TEMP%TYPE'||unistr('\000a')||
+'  IS'||unistr('\000a')||
+'    l_value_raw STU_PREF.PASSWORD_ENC%TYPE;'||unistr('\000a')||
+'    l_id        STU_PREF.PREF_ID%TYPE;'||unistr('\000a')||
+'    l_return    STU_PREF.PASSWORD';
+
+s:=s||'_TEMP%TYPE;'||unistr('\000a')||
+'  BEGIN'||unistr('\000a')||
+'    '||unistr('\000a')||
+'    SELECT PASSWORD_ENC, PREF_ID'||unistr('\000a')||
+'    INTO   l_value_raw, l_id'||unistr('\000a')||
+'    FROM   STU_PREF '||unistr('\000a')||
+'    WHERE  PREF_NAME = p_name'||unistr('\000a')||
+'      AND  PASSWORD_ENC IS NOT NULL;'||unistr('\000a')||
+'    '||unistr('\000a')||
+'    l_return:=decrypt(l_value_raw,l_id);'||unistr('\000a')||
+''||unistr('\000a')||
+'    RETURN l_return;'||unistr('\000a')||
+''||unistr('\000a')||
+'  EXCEPTION WHEN NO_DATA_FOUND THEN'||unistr('\000a')||
+'    RETURN NULL;'||unistr('\000a')||
+'  END GET_PREF_PW;'||unistr('\000a')||
+''||unistr('\000a')||
+'---------------------------------------------------------------------'||unistr('\000a')||
+'--< INSERT_RE';
+
+s:=s||'CORD >--------------------------------------------------'||unistr('\000a')||
+'---------------------------------------------------------------------'||unistr('\000a')||
+'--  Purpose : Insert Record API call'||unistr('\000a')||
+'--    '||unistr('\000a')||
+'--  Comments:'||unistr('\000a')||
+'--'||unistr('\000a')||
+'---------------------------------------------------------------------'||unistr('\000a')||
+'PROCEDURE INSERT_RECORD (p_record     IN gt_pref_record,'||unistr('\000a')||
+'                         p_id     OUT    NUMBER)'||unistr('\000a')||
+'IS'||unistr('\000a')||
+''||unistr('\000a')||
+'BEGIN'||unistr('\000a')||
+'  '||unistr('\000a')||
+'    -- INSERT INTO STU_';
+
+s:=s||'PREF values p_record; --'||unistr('\000a')||
+'    -- although this would work, I would prefer to have some values'||unistr('\000a')||
+'    -- excluded to allow trigger and business logic to work.'||unistr('\000a')||
+'    '||unistr('\000a')||
+'    INSERT INTO STU_PREF'||unistr('\000a')||
+'  ('||unistr('\000a')||
+'    -- PREF_ID      ,-- managed by trigger'||unistr('\000a')||
+'    PREF_NAME    ,'||unistr('\000a')||
+'    VALUE1       ,'||unistr('\000a')||
+'    NUMBER1      ,'||unistr('\000a')||
+'    DATE1        ,'||unistr('\000a')||
+'    PASSWORD_TEMP,'||unistr('\000a')||
+'    -- PASSWORD_ENC       , -- managed by trigger'||unistr('\000a')||
+'    DESCRIPTION  ,'||unistr('\000a')||
+'    A';
+
+s:=s||'PI_EDIT     ,  '||unistr('\000a')||
+'    API_VIEW  '||unistr('\000a')||
+'    -- CREATED_BY   ,-- managed by trigger'||unistr('\000a')||
+'    -- CREATED_ON   ,-- managed by trigger'||unistr('\000a')||
+'    -- UPDATED_BY   ,-- managed by trigger'||unistr('\000a')||
+'    -- UPDATED_ON   ,-- managed by trigger'||unistr('\000a')||
+'  )'||unistr('\000a')||
+'  VALUES'||unistr('\000a')||
+'  ('||unistr('\000a')||
+'    trim(p_record.PREF_NAME),'||unistr('\000a')||
+'    trim(p_record.VALUE1),'||unistr('\000a')||
+'    p_record.NUMBER1,'||unistr('\000a')||
+'    p_record.DATE1,'||unistr('\000a')||
+'    p_record.PASSWORD_TEMP,'||unistr('\000a')||
+'    trim(p_record.DESCRIPTION) ,'||unistr('\000a')||
+'    nvl(p_record.API';
+
+s:=s||'_EDIT,''Y''),  '||unistr('\000a')||
+'    nvl(p_record.API_VIEW,''Y'')'||unistr('\000a')||
+'  )'||unistr('\000a')||
+'  RETURNING PREF_ID'||unistr('\000a')||
+'  INTO p_id;'||unistr('\000a')||
+'  '||unistr('\000a')||
+'   '||unistr('\000a')||
+''||unistr('\000a')||
+'END INSERT_RECORD;'||unistr('\000a')||
+''||unistr('\000a')||
+''||unistr('\000a')||
+'  ---------------------------------------------------------------------'||unistr('\000a')||
+'  --< UPDATE_RECORD >--------------------------------------------------'||unistr('\000a')||
+'  ---------------------------------------------------------------------'||unistr('\000a')||
+'  --  Purpose : When an update is needed - this procedure executes the DM';
+
+s:=s||'L'||unistr('\000a')||
+'  --'||unistr('\000a')||
+'  --  Comments: Internal procedure only '||unistr('\000a')||
+'  ---------------------------------------------------------------------'||unistr('\000a')||
+'PROCEDURE UPDATE_RECORD (p_record     IN OUT gt_pref_record)'||unistr('\000a')||
+'IS'||unistr('\000a')||
+'  lv_current_record VARCHAR2(1);'||unistr('\000a')||
+'  lt_record         gt_pref_record;'||unistr('\000a')||
+'BEGIN'||unistr('\000a')||
+'  '||unistr('\000a')||
+'  FOR l_rec in ('||unistr('\000a')||
+'                SELECT ''X'''||unistr('\000a')||
+'                  FROM STU_PREF'||unistr('\000a')||
+'                 WHERE PREF_ID = p_record.PREF_ID '||unistr('\000a')||
+'           ';
+
+s:=s||'        -- if this flag is set - Edit only through UI'||unistr('\000a')||
+'                   AND p_record.API_EDIT = ''Y'' '||unistr('\000a')||
+'                   -- check to see if there is any difference'||unistr('\000a')||
+'                   AND ('||unistr('\000a')||
+'                      p_record.PASSWORD_TEMP is not null'||unistr('\000a')||
+'                    OR DECODE(PREF_NAME,p_record.PREF_NAME,''SAME'',''DIFF'')=''DIFF'''||unistr('\000a')||
+'                    OR DECODE(VALUE1,p_record.VALUE1,''SAME'',''DIFF'')=''DIFF';
+
+s:=s||''''||unistr('\000a')||
+'                    OR DECODE(NUMBER1,p_record.NUMBER1,''SAME'',''DIFF'')=''DIFF'''||unistr('\000a')||
+'                    OR DECODE(DATE1,p_record.DATE1,''SAME'',''DIFF'')=''DIFF'''||unistr('\000a')||
+'                    OR DECODE(DESCRIPTION,p_record.DESCRIPTION,''SAME'',''DIFF'')=''DIFF'''||unistr('\000a')||
+'                    OR DECODE(API_EDIT,p_record.API_EDIT,''SAME'',''DIFF'')=''DIFF'''||unistr('\000a')||
+'                    OR DECODE(API_VIEW,p_record.API_VIEW,''SAME'',''DIFF'')=''DIFF'''||unistr('\000a')||
+'     ';
+
+s:=s||'               OR DECODE(REVISION,p_record.REVISION,''SAME'',''DIFF'')=''DIFF'''||unistr('\000a')||
+'                   )'||unistr('\000a')||
+'                )'||unistr('\000a')||
+'  LOOP'||unistr('\000a')||
+'  '||unistr('\000a')||
+'    -- Only update if something changed'||unistr('\000a')||
+'    UPDATE STU_PREF SET'||unistr('\000a')||
+'      PREF_NAME     = p_record.PREF_NAME,'||unistr('\000a')||
+'      VALUE1        = p_record.VALUE1,'||unistr('\000a')||
+'      NUMBER1       = p_record.NUMBER1,'||unistr('\000a')||
+'      DATE1         = p_record.DATE1,'||unistr('\000a')||
+'      PASSWORD_TEMP = p_record.PASSWORD_TEMP,'||unistr('\000a')||
+'      DE';
+
+s:=s||'SCRIPTION   = p_record.DESCRIPTION,'||unistr('\000a')||
+'      API_EDIT      = p_record.API_EDIT,'||unistr('\000a')||
+'      API_VIEW      = p_record.API_VIEW'||unistr('\000a')||
+'    WHERE PREF_ID   = p_record.PREF_ID;'||unistr('\000a')||
+'  '||unistr('\000a')||
+'  END LOOP;'||unistr('\000a')||
+''||unistr('\000a')||
+'END UPDATE_RECORD;'||unistr('\000a')||
+''||unistr('\000a')||
+''||unistr('\000a')||
+'  ---------------------------------------------------------------------'||unistr('\000a')||
+'  --< GET_RECORD >--------------------------------------------------'||unistr('\000a')||
+'  ---------------------------------------------------------------';
+
+s:=s||'------'||unistr('\000a')||
+'  --  Purpose : See Specification'||unistr('\000a')||
+'  --'||unistr('\000a')||
+'  --  Comments: '||unistr('\000a')||
+'  ---------------------------------------------------------------------'||unistr('\000a')||
+'FUNCTION GET_RECORD (p_id   IN NUMBER)'||unistr('\000a')||
+'RETURN   gt_pref_record'||unistr('\000a')||
+'IS'||unistr('\000a')||
+'    -- used as return value'||unistr('\000a')||
+'    lt_pref_record  gt_pref_record;'||unistr('\000a')||
+'BEGIN'||unistr('\000a')||
+''||unistr('\000a')||
+'  -- get full user record by ID'||unistr('\000a')||
+'  SELECT '||unistr('\000a')||
+'      PREF_ID,    '||unistr('\000a')||
+'      PREF_NAME,  '||unistr('\000a')||
+'      VALUE1,     '||unistr('\000a')||
+'      NUMBER1,    '||unistr('\000a')||
+'      DATE';
+
+s:=s||'1,      '||unistr('\000a')||
+'      NULL as PASSWORD_TEMP,   /* active choice to not pass value */'||unistr('\000a')||
+'      NULL as PASSWORD_ENC,    /* active choice to not pass value */ '||unistr('\000a')||
+'      DESCRIPTION,'||unistr('\000a')||
+'      API_EDIT,'||unistr('\000a')||
+'      API_VIEW,'||unistr('\000a')||
+'      CREATED_BY, '||unistr('\000a')||
+'      CREATED_ON, '||unistr('\000a')||
+'      UPDATED_BY, '||unistr('\000a')||
+'      UPDATED_ON,'||unistr('\000a')||
+'      REVISION '||unistr('\000a')||
+'  INTO lt_pref_record'||unistr('\000a')||
+'  FROM STU_PREF'||unistr('\000a')||
+'  WHERE PREF_ID = p_id'||unistr('\000a')||
+'    AND API_VIEW = ''Y'';'||unistr('\000a')||
+''||unistr('\000a')||
+'  -- additional security';
+
+s:=s||' can be added as needed'||unistr('\000a')||
+'  -- clear Password'||unistr('\000a')||
+'  -- lt_pref_record.password:=NULL;'||unistr('\000a')||
+'  '||unistr('\000a')||
+'  -- return record'||unistr('\000a')||
+'  RETURN lt_pref_record;'||unistr('\000a')||
+''||unistr('\000a')||
+'EXCEPTION WHEN NO_DATA_FOUND THEN'||unistr('\000a')||
+'    -- bad ID passed - return null'||unistr('\000a')||
+'    RETURN NULL;'||unistr('\000a')||
+'END GET_RECORD;'||unistr('\000a')||
+''||unistr('\000a')||
+'  ---------------------------------------------------------------------'||unistr('\000a')||
+'  --< GET_RECORD >--------------------------------------------------'||unistr('\000a')||
+'  --------------------------';
+
+s:=s||'-------------------------------------------'||unistr('\000a')||
+'  --  Purpose : See Specification'||unistr('\000a')||
+'  --'||unistr('\000a')||
+'  --  Comments: '||unistr('\000a')||
+'  ---------------------------------------------------------------------'||unistr('\000a')||
+'FUNCTION GET_RECORD (p_name   IN STU_PREF.PREF_NAME%TYPE)'||unistr('\000a')||
+'RETURN   gt_pref_record'||unistr('\000a')||
+'IS'||unistr('\000a')||
+'    -- used as return value'||unistr('\000a')||
+'    lt_pref_record  gt_pref_record;'||unistr('\000a')||
+'BEGIN'||unistr('\000a')||
+''||unistr('\000a')||
+'  -- get full user record by ID'||unistr('\000a')||
+'  SELECT '||unistr('\000a')||
+'      PREF_ID,    '||unistr('\000a')||
+'      PREF_';
+
+s:=s||'NAME,  '||unistr('\000a')||
+'      VALUE1,     '||unistr('\000a')||
+'      NUMBER1,    '||unistr('\000a')||
+'      DATE1,      '||unistr('\000a')||
+'      NULL as PASSWORD_TEMP,   /* active choice to not pass value */'||unistr('\000a')||
+'      NULL as PASSWORD_ENC,    /* active choice to not pass value */ '||unistr('\000a')||
+'      DESCRIPTION,'||unistr('\000a')||
+'      API_EDIT,'||unistr('\000a')||
+'      API_VIEW,'||unistr('\000a')||
+'      CREATED_BY, '||unistr('\000a')||
+'      CREATED_ON, '||unistr('\000a')||
+'      UPDATED_BY, '||unistr('\000a')||
+'      UPDATED_ON,'||unistr('\000a')||
+'      REVISION '||unistr('\000a')||
+'  INTO lt_pref_record'||unistr('\000a')||
+'  FROM STU_PREF'||unistr('\000a')||
+'  WHERE PREF_NAM';
+
+s:=s||'E = p_name'||unistr('\000a')||
+'    AND API_VIEW = ''Y'';'||unistr('\000a')||
+''||unistr('\000a')||
+'  -- additional security can be added as needed'||unistr('\000a')||
+'  -- clear Password'||unistr('\000a')||
+'  -- lt_pref_record.password:=NULL;'||unistr('\000a')||
+'  '||unistr('\000a')||
+'  -- return record'||unistr('\000a')||
+'  RETURN lt_pref_record;'||unistr('\000a')||
+''||unistr('\000a')||
+'EXCEPTION WHEN NO_DATA_FOUND THEN'||unistr('\000a')||
+'    -- bad ID passed - return null'||unistr('\000a')||
+'    RETURN NULL;'||unistr('\000a')||
+'END GET_RECORD;'||unistr('\000a')||
+''||unistr('\000a')||
+''||unistr('\000a')||
+'  ---------------------------------------------------------------------'||unistr('\000a')||
+'  --< INSERT_UPDATE_RECORD >--------';
+
+s:=s||'--------------------------------------'||unistr('\000a')||
+'  ---------------------------------------------------------------------'||unistr('\000a')||
+'  --  Purpose : Provides the USER_ID and feedback'||unistr('\000a')||
+'  --'||unistr('\000a')||
+'  --  Comments: '||unistr('\000a')||
+'  ---------------------------------------------------------------------'||unistr('\000a')||
+'PROCEDURE INSERT_UPDATE_RECORD (p_record    IN OUT gt_pref_record,'||unistr('\000a')||
+'                                p_id           OUT NUMBER)'||unistr('\000a')||
+'IS'||unistr('\000a')||
+'    lv_id_check ';
+
+s:=s||'     number:=NULL;'||unistr('\000a')||
+'    lt_record        gt_pref_record;'||unistr('\000a')||
+'BEGIN'||unistr('\000a')||
+''||unistr('\000a')||
+'  -- evaluate UPDATE (already exists) vs. CREATE'||unistr('\000a')||
+''||unistr('\000a')||
+'  --'||unistr('\000a')||
+'  -- ID method - and ID was passed in with the p_record record type'||unistr('\000a')||
+'  -- Other matching routines can be included here if desired'||unistr('\000a')||
+'  --'||unistr('\000a')||
+'  IF  p_record.PREF_ID IS NOT NULL '||unistr('\000a')||
+'  THEN'||unistr('\000a')||
+'    DBMS_OUTPUT.put_line(''ID:'' || p_record.PREF_ID);'||unistr('\000a')||
+'    -- update by ID value'||unistr('\000a')||
+'    UPDATE_RECORD(p_record';
+
+s:=s||');'||unistr('\000a')||
+'  ELSE'||unistr('\000a')||
+'    -- check for existing record by name'||unistr('\000a')||
+'    lt_record:=GET_RECORD (p_name => p_record.PREF_NAME);'||unistr('\000a')||
+'    '||unistr('\000a')||
+'    -- If the record was found, the start an update to it.'||unistr('\000a')||
+'    IF lt_record.PREF_ID IS NOT NULL'||unistr('\000a')||
+'    THEN'||unistr('\000a')||
+'      p_record.pref_id := lt_record.PREF_ID;'||unistr('\000a')||
+'      -- update by ID value'||unistr('\000a')||
+'      UPDATE_RECORD(p_record);'||unistr('\000a')||
+'    ELSE'||unistr('\000a')||
+'      -- not found by ID or NAME'||unistr('\000a')||
+'      -- new record '||unistr('\000a')||
+'      INSERT_R';
+
+s:=s||'ECORD(p_record,p_id);      '||unistr('\000a')||
+'    END IF;'||unistr('\000a')||
+'  END IF;'||unistr('\000a')||
+'        '||unistr('\000a')||
+'END INSERT_UPDATE_RECORD;'||unistr('\000a')||
+''||unistr('\000a')||
+''||unistr('\000a')||
+'  ---------------------------------------------------------------------'||unistr('\000a')||
+'  --< INSERT_UPDATE_RECORD >----------------------------------------------'||unistr('\000a')||
+'  ---------------------------------------------------------------------'||unistr('\000a')||
+'  --  Purpose : No feedback version of insert'||unistr('\000a')||
+'  --'||unistr('\000a')||
+'  --  Comments: '||unistr('\000a')||
+'  ------------------------';
+
+s:=s||'---------------------------------------------'||unistr('\000a')||
+'PROCEDURE INSERT_UPDATE_RECORD (p_record           IN gt_pref_record)'||unistr('\000a')||
+'IS'||unistr('\000a')||
+'    ln_id  NUMBER;'||unistr('\000a')||
+'    lt_record     gt_pref_record;'||unistr('\000a')||
+'BEGIN'||unistr('\000a')||
+'  '||unistr('\000a')||
+'  -- convert to a local variable - due to OUTPUT variables'||unistr('\000a')||
+'  lt_record:=p_record;'||unistr('\000a')||
+'  '||unistr('\000a')||
+'  -- call full version  '||unistr('\000a')||
+'  INSERT_UPDATE_RECORD ( p_record    => lt_record,'||unistr('\000a')||
+'                         p_id        => ln_id);'||unistr('\000a')||
+''||unistr('\000a')||
+''||unistr('\000a')||
+'END INSE';
+
+s:=s||'RT_UPDATE_RECORD;'||unistr('\000a')||
+''||unistr('\000a')||
+'---------------------------------------------------------------------'||unistr('\000a')||
+'--< DELETE_RECORD >----------------------------------------------'||unistr('\000a')||
+'---------------------------------------------------------------------'||unistr('\000a')||
+'--  Purpose : No feedback version of insert'||unistr('\000a')||
+'--'||unistr('\000a')||
+'--  Comments: '||unistr('\000a')||
+'---------------------------------------------------------------------'||unistr('\000a')||
+'PR';
+
+wwv_flow_api.create_install_script(
+  p_id => 7544832510487211 + wwv_flow_api.g_id_offset,
+  p_flow_id => wwv_flow.g_flow_id,
+  p_install_id=> 7231614457092106 + wwv_flow_api.g_id_offset,
+  p_name => 'Install Combined 0',
+  p_sequence=> 10,
+  p_script_type=> 'INSTALL',
+  p_script_clob=> s);
+end;
+ 
+ 
+end;
+/
+
+ 
+begin
+ 
+declare
+    s varchar2(32767) := null;
+begin
+s:=s||'OCEDURE DELETE_RECORD (p_id           IN NUMBER)'||unistr('\000a')||
+'IS'||unistr('\000a')||
+''||unistr('\000a')||
+'BEGIN'||unistr('\000a')||
+'  '||unistr('\000a')||
+'  -- additional protections can be placed here'||unistr('\000a')||
+'  DELETE FROM STU_PREF '||unistr('\000a')||
+'  WHERE PREF_ID = p_id'||unistr('\000a')||
+'  AND API_EDIT = ''Y'';'||unistr('\000a')||
+''||unistr('\000a')||
+'END DELETE_RECORD;'||unistr('\000a')||
+''||unistr('\000a')||
+'--------------------------------------------------------------------------------'||unistr('\000a')||
+'--------------------------------------------------------------------------------'||unistr('\000a')||
+''||unistr('\000a')||
+''||unistr('\000a')||
+'   '||unistr('\000a')||
+'END STU_PREF_UTIL;'||unistr('\000a')||
+''||unistr('\000a')||
+'/'||unistr('\000a')||
+''||unistr('\000a')||
+'INSERT INT';
+
+s:=s||'O STU_PREF (PREF_NAME, VALUE1, DESCRIPTION) VALUES (''STU_PREF-CreateOnSet'', ''Y'', ''On Set Value - if record does not exist - should it be created?'');'||unistr('\000a')||
+''||unistr('\000a')||
+'commit;'||unistr('\000a')||
+'';
+
+wwv_flow_api.append_to_install_script(
+  p_id => 7544832510487211 + wwv_flow_api.g_id_offset,
+  p_flow_id => wwv_flow.g_flow_id,
+  p_script_clob => s);
+end;
+ 
+ 
+end;
+/
+
 --application/deployment/checks
 prompt  ...application deployment checks
 --

@@ -20,9 +20,11 @@ print "\n";
 
 # Values used that need to be customized
 my $fileSpec = "
-../tbl/*.sql 
+../tbl/*_table.sql 
 ../pkg/*.pks 
+../tbl/*_trigger.sql 
 ../pkg/*.pkb
+../data/*.sql
 ";
 # my @files = < ../tbl/*.sql ../pkg/*.pks ../pkg/*.pkb >;
 my $fileTargetPrefix = 'z_install_combined_';
