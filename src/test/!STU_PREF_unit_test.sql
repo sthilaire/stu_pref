@@ -1,5 +1,7 @@
 SET SERVEROUTPUT ON
 
+-- Single procedrue to test writing, reading, and removing of records
+
 --
 -- EXEC Insert
 --
